@@ -56,11 +56,13 @@ const appData = {
       id: "maimai",
       name: "麦麦小鹅",
       emoji: "🐧",
+      email: "suzhiyuan0326@163.com",
     },
     {
       id: "tutu",
       name: "兔兔公主",
       emoji: "🐰",
+      email: "penguinbunny0517@163.com",
     },
   ],
   messageBoards: [
@@ -72,7 +74,7 @@ const appData = {
       accent: "penguin",
       emoji: "🐧",
       line: "“他们写了日影一封信。”",
-      allowedEmails: ["suzhiyuan0326@163.com"],
+      allowedEmails: ["suzhiyuan0326@163.com", "penguinbunny0517@163.com"],
     },
     {
       id: "tutu",
@@ -82,7 +84,7 @@ const appData = {
       accent: "rabbit",
       emoji: "🐰",
       line: "“我的诗情没有两片叶子。”",
-      allowedEmails: ["penguinbunny0517@163.com"],
+      allowedEmails: ["suzhiyuan0326@163.com", "penguinbunny0517@163.com"],
     },
   ],
   auth: {
@@ -314,7 +316,6 @@ const elements = {
   messageModalTitle: document.querySelector("#messageModalTitle"),
   messageModalSubtitle: document.querySelector("#messageModalSubtitle"),
   messageForm: document.querySelector("#messageForm"),
-  messageAuthor: document.querySelector("#messageAuthor"),
   messageText: document.querySelector("#messageText"),
   messageImages: document.querySelector("#messageImages"),
   messageImageLimit: document.querySelector("#messageImageLimit"),
@@ -810,6 +811,32 @@ function getCurrentAuthEmail() {
   return normalizeEmail(authState.session?.user?.email);
 }
 
+function getAuthorByEmail(email) {
+  const normalizedEmail = normalizeEmail(email);
+
+  return appData.messageAuthors.find((author) => author.email === normalizedEmail) || null;
+}
+
+function getCurrentAuthor() {
+  return getAuthorByEmail(getCurrentAuthEmail());
+}
+
+function getBoardOwnerAuthor(boardId) {
+  return appData.messageAuthors.find((author) => author.id === boardId) || null;
+}
+
+function getBoardPermissionText(board) {
+  if (board.id === "maimai") {
+    return "「麦麦の留言板」只允许麦麦编辑 & 兔兔查看～";
+  }
+
+  if (board.id === "tutu") {
+    return "「兔兔の留言板」只允许兔兔编辑 & 麦麦查看～";
+  }
+
+  return "这个留言板只允许专属账号进入。";
+}
+
 function isAllowedMessageEmail(email, boardId) {
   return getBoardAllowedEmails(boardId).includes(normalizeEmail(email));
 }
@@ -821,6 +848,15 @@ function isMessageAuthenticated(boardId = messageState.activeBoardId || authStat
 
 function isBoardAuthConfigured(boardId) {
   return getBoardAllowedEmails(boardId).length > 0;
+}
+
+function canEditBoard(boardId = messageState.activeBoardId) {
+  const author = getCurrentAuthor();
+  return Boolean(author && author.id === boardId);
+}
+
+function canEditMessage(message) {
+  return Boolean(message && canEditBoard(message.boardId));
 }
 
 function setAuthStatus(message = "", tone = "neutral") {
@@ -890,7 +926,7 @@ function openAuthModal(boardId) {
   const allowedEmails = getBoardAllowedEmails(boardId);
 
   authState.pendingBoardId = boardId;
-  elements.authEmail.value = allowedEmails[0] || "";
+  elements.authEmail.value = "";
   elements.authPassword.value = "";
   elements.authForm.hidden = allowedEmails.length === 0;
   elements.authSubmit.textContent = "登录";
@@ -898,13 +934,13 @@ function openAuthModal(boardId) {
   if (!board) {
     setAuthStatus("这个留言板暂时没有找到。", "error");
   } else if (allowedEmails.length === 0) {
-    setAuthStatus(`${board.title} 还没有设置可登录邮箱。`, "error");
+    setAuthStatus("这个留言板还没有开放登录。", "error");
   } else if (authState.session && !isMessageAuthenticated(boardId)) {
-    setAuthStatus(`当前登录邮箱不能进入 ${board.title}，请退出后换允许的邮箱。`, "error");
+    setAuthStatus("当前账号不能进入这个留言板，请换另一个专属账号。", "error");
   } else if (!authState.client) {
     setAuthStatus("认证服务还没准备好，检查网络后刷新页面。", "error");
   } else {
-    setAuthStatus(`${board.title} 只允许 ${allowedEmails.join("、")} 登录。`, "neutral");
+    setAuthStatus(getBoardPermissionText(board), "neutral");
   }
 
   elements.authModal.hidden = false;
@@ -942,7 +978,7 @@ async function submitPasswordAuth() {
   }
 
   if (!isAllowedMessageEmail(email, board.id)) {
-    setAuthStatus(`${board.title} 只能使用 ${getBoardAllowedEmails(board.id).join("、")}。`, "error");
+    setAuthStatus("这个账号不能进入当前留言板。", "error");
     return;
   }
 
@@ -1001,9 +1037,12 @@ function updateMessageAuthStatus() {
 
   const email = getCurrentAuthEmail();
   const boardId = messageState.activeBoardId;
+  const author = getCurrentAuthor();
+  const isOwner = canEditBoard(boardId);
+  const board = getBoard(boardId);
   const statusText = isAllowedMessageEmail(email, boardId)
-    ? `已登录：${email}`
-    : `当前邮箱不在允许名单：${email}`;
+    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言和编辑" : `可查看${board ? board.title : "留言板"}`}`
+    : "当前账号不在允许名单。";
 
   elements.messageAuthStatus.innerHTML = `
     <span>${escapeHTML(statusText)}</span>
@@ -1155,12 +1194,6 @@ function renderMessageBoards() {
   });
 }
 
-function renderMessageAuthors() {
-  elements.messageAuthor.innerHTML = appData.messageAuthors
-    .map((author) => `<option value="${author.id}">${author.emoji} ${author.name}</option>`)
-    .join("");
-}
-
 function setMessageFormHint(text = "") {
   if (!elements.messageFormHint) return;
   elements.messageFormHint.textContent = text;
@@ -1189,6 +1222,7 @@ function resetMessageForm() {
   elements.messageForm.reset();
   elements.messageSubmit.textContent = "留言";
   elements.messageCancelEdit.hidden = true;
+  elements.messageForm.hidden = !canEditBoard();
   renderMessagePreview();
   setMessageFormHint("");
 }
@@ -1234,6 +1268,7 @@ function getActiveBoardMessages() {
 function renderMessageList() {
   const board = getBoard(messageState.activeBoardId);
   const messages = getActiveBoardMessages();
+  const isEditableBoard = canEditBoard(board?.id);
 
   if (!board) return;
 
@@ -1244,7 +1279,7 @@ function renderMessageList() {
     elements.messageList.innerHTML = `
       <div class="message-empty">
         <strong>这里还没有留言</strong>
-        <span>第一张小纸条，等你来写。</span>
+        <span>${isEditableBoard ? "第一张小纸条，等你来写。" : "这里暂时还没有小纸条。"}</span>
       </div>
     `;
     return;
@@ -1254,6 +1289,7 @@ function renderMessageList() {
     .map((message) => {
       const author = getAuthor(message.authorId);
       const images = Array.isArray(message.images) ? message.images : [];
+      const canManageMessage = canEditMessage(message);
 
       return `
         <article class="message-item" data-message-id="${message.id}">
@@ -1270,10 +1306,12 @@ function renderMessageList() {
             .map((src, index) => `<img src="${escapeHTML(src)}" alt="留言图片 ${index + 1}">`)
             .join("")}</div>`
           : ""}
-          <div class="message-item-actions">
-            <button type="button" data-edit-message="${message.id}">编辑</button>
-            <button class="message-delete-button" type="button" data-delete-message="${message.id}">删除</button>
-          </div>
+          ${canManageMessage
+          ? `<div class="message-item-actions">
+              <button type="button" data-edit-message="${message.id}">编辑</button>
+              <button class="message-delete-button" type="button" data-delete-message="${message.id}">删除</button>
+            </div>`
+          : ""}
         </article>
       `;
     })
@@ -1289,12 +1327,17 @@ function openMessageModal(boardId) {
   messageState.activeBoardId = board.id;
   elements.messageModalTitle.textContent = board.title;
   elements.messageModalSubtitle.textContent = board.line;
-  updateMessageAuthStatus();
   resetMessageForm();
+  updateMessageAuthStatus();
   renderMessageList();
   elements.messageModal.hidden = false;
   document.body.classList.add("modal-open");
-  elements.messageText.focus();
+
+  if (canEditBoard(board.id)) {
+    elements.messageText.focus();
+  } else {
+    document.querySelector(".message-modal .modal-close").focus();
+  }
 }
 
 function closeMessageModal() {
@@ -1309,10 +1352,21 @@ function createMessageId() {
 }
 
 function saveMessageFromForm() {
+  if (!canEditBoard()) {
+    setMessageFormHint("这个信箱你只能查看，不能留言或编辑。");
+    return;
+  }
+
   const content = elements.messageText.value.trim();
-  const authorId = elements.messageAuthor.value;
+  const currentAuthor = getCurrentAuthor();
+  const authorId = currentAuthor?.id;
   const imageSources = messageState.draftImages.map((image) => image.src);
   const now = new Date().toISOString();
+
+  if (!authorId) {
+    setMessageFormHint("没有识别出当前登录身份，请重新登录。");
+    return;
+  }
 
   if (!content && imageSources.length === 0) {
     setMessageFormHint("先写一点文字，或者放一张图片。");
@@ -1326,6 +1380,11 @@ function saveMessageFromForm() {
 
     if (targetIndex < 0) {
       setMessageFormHint("这条留言没有找到，可以重新打开留言板。");
+      return;
+    }
+
+    if (!canEditMessage(messages[targetIndex])) {
+      setMessageFormHint("这个信箱你只能查看，不能编辑。");
       return;
     }
 
@@ -1360,10 +1419,13 @@ function startEditingMessage(messageId) {
   const message = getStoredMessages().find((item) => item.id === messageId);
 
   if (!message) return;
+  if (!canEditMessage(message)) {
+    setMessageFormHint("这个信箱你只能查看，不能编辑。");
+    return;
+  }
 
   messageState.editingMessageId = message.id;
   elements.messageText.value = message.content || "";
-  elements.messageAuthor.value = message.authorId || appData.messageAuthors[0].id;
   messageState.draftImages = (message.images || []).map((src) => ({ src }));
   elements.messageSubmit.textContent = "保存编辑";
   elements.messageCancelEdit.hidden = false;
@@ -1376,6 +1438,10 @@ function deleteMessage(messageId) {
   const message = getStoredMessages().find((item) => item.id === messageId);
 
   if (!message) return;
+  if (!canEditMessage(message)) {
+    setMessageFormHint("这个信箱你只能查看，不能删除。");
+    return;
+  }
 
   const shouldDelete = window.confirm("确定要删除这条留言吗？删除后本地不会再显示。");
 
@@ -1397,7 +1463,6 @@ function deleteMessage(messageId) {
 function bindMessageBoards() {
   if (!elements.messageModal) return;
 
-  renderMessageAuthors();
   renderMessagePreview();
 
   elements.messageForm.addEventListener("submit", (event) => {
