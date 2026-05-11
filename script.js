@@ -47,6 +47,9 @@ const appData = {
       artist: "汪苏泷",
       src: "assets/musics/唯你懂我心-汪苏泷.mp3",
     },
+    {
+      id: "first-day",
+    }
   ],
   messageAuthors: [
     {
@@ -79,7 +82,7 @@ const appData = {
       accent: "rabbit",
       emoji: "🐰",
       line: "“我的诗情没有两片叶子。”",
-      allowedEmails: [],
+      allowedEmails: ["penguinbunny0517@163.com"],
     },
   ],
   auth: {
@@ -286,7 +289,6 @@ const authState = {
   client: null,
   session: null,
   pendingBoardId: null,
-  mode: "signIn",
   isReady: false,
 };
 
@@ -325,7 +327,6 @@ const elements = {
   messageFeedCount: document.querySelector("#messageFeedCount"),
   messageList: document.querySelector("#messageList"),
   authModal: document.querySelector("#authModal"),
-  authModeTabs: document.querySelector("#authModeTabs"),
   authForm: document.querySelector("#authForm"),
   authEmail: document.querySelector("#authEmail"),
   authPassword: document.querySelector("#authPassword"),
@@ -822,10 +823,6 @@ function isBoardAuthConfigured(boardId) {
   return getBoardAllowedEmails(boardId).length > 0;
 }
 
-function getAuthRedirectURL() {
-  return `${window.location.origin}${window.location.pathname}#messages`;
-}
-
 function setAuthStatus(message = "", tone = "neutral") {
   if (!elements.authStatus) return;
 
@@ -833,39 +830,9 @@ function setAuthStatus(message = "", tone = "neutral") {
   elements.authStatus.dataset.tone = tone;
 }
 
-function getAuthActionLabel(isLoading = false) {
-  if (authState.mode === "signUp") {
-    return isLoading ? "注册中..." : "注册";
-  }
-
-  return isLoading ? "登录中..." : "登录";
-}
-
 function setAuthSubmitLoading(isLoading) {
   elements.authSubmit.disabled = isLoading;
-  elements.authSubmit.textContent = getAuthActionLabel(isLoading);
-}
-
-function setAuthMode(mode) {
-  authState.mode = mode === "signUp" ? "signUp" : "signIn";
-  elements.authSubmit.textContent = getAuthActionLabel(false);
-  elements.authPassword.autocomplete = authState.mode === "signUp" ? "new-password" : "current-password";
-
-  elements.authModeTabs.querySelectorAll("[data-auth-mode]").forEach((button) => {
-    const isActive = button.dataset.authMode === authState.mode;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-selected", String(isActive));
-  });
-
-  const board = getBoard(authState.pendingBoardId);
-  if (board && isBoardAuthConfigured(board.id)) {
-    setAuthStatus(
-      authState.mode === "signUp"
-        ? `${board.title} 目前只允许 ${getBoardAllowedEmails(board.id).join("、")} 注册。`
-        : `${board.title} 目前只允许 ${getBoardAllowedEmails(board.id).join("、")} 登录。`,
-      "neutral",
-    );
-  }
+  elements.authSubmit.textContent = isLoading ? "登录中..." : "登录";
 }
 
 function createSupabaseClient() {
@@ -926,19 +893,18 @@ function openAuthModal(boardId) {
   elements.authEmail.value = allowedEmails[0] || "";
   elements.authPassword.value = "";
   elements.authForm.hidden = allowedEmails.length === 0;
-  elements.authModeTabs.hidden = allowedEmails.length === 0;
-  setAuthMode("signIn");
+  elements.authSubmit.textContent = "登录";
 
   if (!board) {
     setAuthStatus("这个留言板暂时没有找到。", "error");
   } else if (allowedEmails.length === 0) {
-    setAuthStatus(`${board.title} 还没有设置可注册/登录的邮箱，之后补上兔兔邮箱再开启。`, "error");
+    setAuthStatus(`${board.title} 还没有设置可登录邮箱。`, "error");
   } else if (authState.session && !isMessageAuthenticated(boardId)) {
     setAuthStatus(`当前登录邮箱不能进入 ${board.title}，请退出后换允许的邮箱。`, "error");
   } else if (!authState.client) {
     setAuthStatus("认证服务还没准备好，检查网络后刷新页面。", "error");
   } else {
-    setAuthStatus(`${board.title} 目前只允许 ${allowedEmails.join("、")} 登录或注册。`, "neutral");
+    setAuthStatus(`${board.title} 只允许 ${allowedEmails.join("、")} 登录。`, "neutral");
   }
 
   elements.authModal.hidden = false;
@@ -971,7 +937,7 @@ async function submitPasswordAuth() {
   const board = getBoard(boardId);
 
   if (!board || !isBoardAuthConfigured(board.id)) {
-    setAuthStatus("这个留言板还没有开放注册/登录。", "error");
+    setAuthStatus("这个留言板还没有开放登录。", "error");
     return;
   }
 
@@ -993,39 +959,6 @@ async function submitPasswordAuth() {
   setAuthSubmitLoading(true);
   setAuthStatus("", "neutral");
 
-  if (authState.mode === "signUp") {
-    const { data, error } = await authState.client.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: getAuthRedirectURL(),
-        data: {
-          board_id: board.id,
-          display_name: board.owner,
-        },
-      },
-    });
-
-    setAuthSubmitLoading(false);
-
-    if (error) {
-      setAuthStatus("注册失败。这个邮箱可能已经注册过，或密码不符合 Supabase 设置。", "error");
-      return;
-    }
-
-    if (data.session) {
-      authState.session = data.session;
-      updateAuthDependentUI();
-      closeAuthModal();
-      openMessageModal(board.id);
-      return;
-    }
-
-    setAuthStatus("注册邮件已发送。请先去邮箱完成验证，再回到这里用密码登录。", "success");
-    setAuthMode("signIn");
-    return;
-  }
-
   const { data, error } = await authState.client.auth.signInWithPassword({
     email,
     password,
@@ -1034,7 +967,7 @@ async function submitPasswordAuth() {
   setAuthSubmitLoading(false);
 
   if (error) {
-    setAuthStatus("登录失败。请确认邮箱、密码正确，并且已经完成邮箱验证。", "error");
+    setAuthStatus("登录失败。请确认邮箱、密码正确。", "error");
     return;
   }
 
@@ -1084,13 +1017,6 @@ function bindAuthModal() {
   elements.authForm.addEventListener("submit", (event) => {
     event.preventDefault();
     submitPasswordAuth();
-  });
-
-  elements.authModeTabs.addEventListener("click", (event) => {
-    const modeButton = event.target.closest("[data-auth-mode]");
-    if (!modeButton) return;
-
-    setAuthMode(modeButton.dataset.authMode);
   });
 
   elements.authModal.addEventListener("click", (event) => {
