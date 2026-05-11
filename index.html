@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penguin & Bunny</title>
+  <meta name="description" content="麦麦小鹅和兔兔公主的专属恋爱足迹地图。">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="site-header" aria-label="专属二人网页">
+      <a class="brand-lockup" href="#home" aria-label="回到我们的地图">
+        <span class="brand-emoji" aria-hidden="true">🐧</span>
+        <span class="brand-copy">
+          <span class="brand-title">Penguin & Bunny</span>
+          <span class="brand-subtitle">Two hearts, one tiny world.</span>
+        </span>
+        <span class="brand-emoji" aria-hidden="true">🐰</span>
+      </a>
+      <div class="header-actions">
+        <nav class="site-nav" aria-label="页面导航">
+          <a href="#map">距离地图</a>
+          <a href="#trips">旅行足迹</a>
+          <a href="#timeline">鹅兔时间线</a>
+          <a href="#next">下一次见面</a>
+        </nav>
+
+        <div class="music-player" id="musicPlayer">
+          <button class="music-toggle" id="musicToggle" type="button" aria-label="打开音乐播放器" aria-expanded="false"
+            aria-controls="musicMenu">
+            <span class="music-note" aria-hidden="true">♪</span>
+            <span id="musicLabel"></span>
+          </button>
+          <div class="music-menu" id="musicMenu" hidden></div>
+          <audio id="bgmAudio" preload="metadata"></audio>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-section" id="home" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="kicker">Our Huge and Tiny World</p>
+          <h1 id="hero-title">
+            <span>把大洋两岸</span>
+            <span>折成我们的</span>
+            <span>小小地图。</span>
+          </h1>
+          <p class="hero-note">
+            "I'll be there for the highs and lows."
+          </p>
+        </div>
+
+        <section class="map-workbench" id="map" aria-labelledby="map-title">
+          <div class="map-heading">
+            <div>
+              <p class="section-kicker">Current Distance</p>
+              <h2 id="map-title">我们的距离地图</h2>
+            </div>
+            <div class="distance-badge" aria-live="polite">
+              <span id="distanceValue">11,433 km</span>
+              <span>此刻距离</span>
+            </div>
+          </div>
+
+          <div class="map-canvas" id="mapCanvas" aria-label="鹅兔真实世界地图"></div>
+
+          <div class="location-strip" id="locationStrip"></div>
+        </section>
+      </section>
+
+      <section class="trips-section" id="trips" aria-labelledby="trips-title">
+        <div class="section-inner">
+          <div class="section-heading">
+            <p class="section-kicker">Travel Memories</p>
+            <h2 id="trips-title">一起旅行过的地方</h2>
+          </div>
+          <div class="trip-grid" id="tripGrid"></div>
+        </div>
+      </section>
+
+      <section class="timeline-section" id="timeline" aria-labelledby="timeline-title">
+        <div class="section-inner">
+          <div class="section-heading timeline-heading">
+            <div>
+              <p class="section-kicker">Our Love Timeline</p>
+              <h2 id="timeline-title">恋爱时间胶卷</h2>
+            </div>
+            <p class="timeline-note">从相识那天起，每一格都亮晶晶。</p>
+          </div>
+          <div class="timeline-viewport is-at-start" id="timelineViewport" aria-label="鹅兔横向时间线，可左右滑动">
+            <ol class="timeline-track" id="timelineTrack" tabindex="0"></ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="next-section" id="next" aria-labelledby="next-title">
+        <div class="section-inner next-layout">
+          <div class="next-copy">
+            <p class="section-kicker">Next Hug</p>
+            <h2 id="next-title">下一次见面</h2>
+            <p id="nextMeetText">待设定</p>
+          </div>
+          <button class="miss-button" id="missButton" type="button">
+            <span class="button-heart" aria-hidden="true"></span>
+            想你一下
+          </button>
+          <p class="miss-message" id="missMessage" aria-live="polite"></p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="trip-modal" id="tripModal" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" type="button" aria-label="关闭回忆" data-close-modal></button>
+      <div class="modal-gallery">
+        <button class="modal-nav modal-prev" id="modalPrev" type="button" aria-label="上一张照片"></button>
+        <img id="modalImage" alt="">
+        <button class="modal-nav modal-next" id="modalNext" type="button" aria-label="下一张照片"></button>
+        <span class="modal-counter" id="modalCounter">1 / 1</span>
+      </div>
+      <div class="modal-copy">
+        <h2 id="modalTitle"></h2>
+        <p class="modal-english" id="modalEnglish"></p>
+        <blockquote id="modalQuote"></blockquote>
+      </div>
+    </article>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
