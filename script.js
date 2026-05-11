@@ -69,6 +69,7 @@ const appData = {
       accent: "penguin",
       emoji: "🐧",
       line: "“他们写了日影一封信。”",
+      allowedEmails: ["suzhiyuan0326@163.com"],
     },
     {
       id: "tutu",
@@ -78,12 +79,12 @@ const appData = {
       accent: "rabbit",
       emoji: "🐰",
       line: "“我的诗情没有两片叶子。”",
+      allowedEmails: [],
     },
   ],
   auth: {
     supabaseUrl: "https://jzpoaywushcdqrhssksm.supabase.co",
     supabaseAnonKey: "sb_publishable_yYHiwLSXOGgQtolLUp0sIQ_9F6y3s5V",
-    allowedEmails: ["suzhiyuan0326@163.com"],
   },
   trips: [
     {
@@ -285,6 +286,7 @@ const authState = {
   client: null,
   session: null,
   pendingBoardId: null,
+  mode: "signIn",
   isReady: false,
 };
 
@@ -323,8 +325,10 @@ const elements = {
   messageFeedCount: document.querySelector("#messageFeedCount"),
   messageList: document.querySelector("#messageList"),
   authModal: document.querySelector("#authModal"),
+  authModeTabs: document.querySelector("#authModeTabs"),
   authForm: document.querySelector("#authForm"),
   authEmail: document.querySelector("#authEmail"),
+  authPassword: document.querySelector("#authPassword"),
   authSubmit: document.querySelector("#authSubmit"),
   authStatus: document.querySelector("#authStatus"),
   tripModal: document.querySelector("#tripModal"),
@@ -796,20 +800,26 @@ function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
 }
 
-function getAllowedEmails() {
-  return appData.auth.allowedEmails.map(normalizeEmail);
+function getBoardAllowedEmails(boardId) {
+  const board = getBoard(boardId);
+  return (board?.allowedEmails || []).map(normalizeEmail);
 }
 
 function getCurrentAuthEmail() {
   return normalizeEmail(authState.session?.user?.email);
 }
 
-function isAllowedMessageEmail(email) {
-  return getAllowedEmails().includes(normalizeEmail(email));
+function isAllowedMessageEmail(email, boardId) {
+  return getBoardAllowedEmails(boardId).includes(normalizeEmail(email));
 }
 
-function isMessageAuthenticated() {
-  return Boolean(authState.session && isAllowedMessageEmail(getCurrentAuthEmail()));
+function isMessageAuthenticated(boardId = messageState.activeBoardId || authState.pendingBoardId) {
+  if (!boardId) return false;
+  return Boolean(authState.session && isAllowedMessageEmail(getCurrentAuthEmail(), boardId));
+}
+
+function isBoardAuthConfigured(boardId) {
+  return getBoardAllowedEmails(boardId).length > 0;
 }
 
 function getAuthRedirectURL() {
@@ -823,9 +833,39 @@ function setAuthStatus(message = "", tone = "neutral") {
   elements.authStatus.dataset.tone = tone;
 }
 
+function getAuthActionLabel(isLoading = false) {
+  if (authState.mode === "signUp") {
+    return isLoading ? "注册中..." : "注册";
+  }
+
+  return isLoading ? "登录中..." : "登录";
+}
+
 function setAuthSubmitLoading(isLoading) {
   elements.authSubmit.disabled = isLoading;
-  elements.authSubmit.textContent = isLoading ? "发送中..." : "发送登录链接";
+  elements.authSubmit.textContent = getAuthActionLabel(isLoading);
+}
+
+function setAuthMode(mode) {
+  authState.mode = mode === "signUp" ? "signUp" : "signIn";
+  elements.authSubmit.textContent = getAuthActionLabel(false);
+  elements.authPassword.autocomplete = authState.mode === "signUp" ? "new-password" : "current-password";
+
+  elements.authModeTabs.querySelectorAll("[data-auth-mode]").forEach((button) => {
+    const isActive = button.dataset.authMode === authState.mode;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+  });
+
+  const board = getBoard(authState.pendingBoardId);
+  if (board && isBoardAuthConfigured(board.id)) {
+    setAuthStatus(
+      authState.mode === "signUp"
+        ? `${board.title} 目前只允许 ${getBoardAllowedEmails(board.id).join("、")} 注册。`
+        : `${board.title} 目前只允许 ${getBoardAllowedEmails(board.id).join("、")} 登录。`,
+      "neutral",
+    );
+  }
 }
 
 function createSupabaseClient() {
@@ -867,7 +907,7 @@ async function initSupabaseAuth() {
     authState.session = session;
     updateAuthDependentUI();
 
-    if (isMessageAuthenticated() && authState.pendingBoardId) {
+    if (authState.pendingBoardId && isMessageAuthenticated(authState.pendingBoardId)) {
       const boardId = authState.pendingBoardId;
       authState.pendingBoardId = null;
       closeAuthModal();
@@ -879,20 +919,36 @@ async function initSupabaseAuth() {
 }
 
 function openAuthModal(boardId) {
-  authState.pendingBoardId = boardId;
-  elements.authEmail.value = appData.auth.allowedEmails[0] || "";
+  const board = getBoard(boardId);
+  const allowedEmails = getBoardAllowedEmails(boardId);
 
-  if (authState.session && !isMessageAuthenticated()) {
-    setAuthStatus("当前登录邮箱不在鹅兔名单里，请先退出后换允许的邮箱。", "error");
+  authState.pendingBoardId = boardId;
+  elements.authEmail.value = allowedEmails[0] || "";
+  elements.authPassword.value = "";
+  elements.authForm.hidden = allowedEmails.length === 0;
+  elements.authModeTabs.hidden = allowedEmails.length === 0;
+  setAuthMode("signIn");
+
+  if (!board) {
+    setAuthStatus("这个留言板暂时没有找到。", "error");
+  } else if (allowedEmails.length === 0) {
+    setAuthStatus(`${board.title} 还没有设置可注册/登录的邮箱，之后补上兔兔邮箱再开启。`, "error");
+  } else if (authState.session && !isMessageAuthenticated(boardId)) {
+    setAuthStatus(`当前登录邮箱不能进入 ${board.title}，请退出后换允许的邮箱。`, "error");
   } else if (!authState.client) {
     setAuthStatus("认证服务还没准备好，检查网络后刷新页面。", "error");
   } else {
-    setAuthStatus("邮箱验证开启后，登录链接会发送到允许的邮箱。", "neutral");
+    setAuthStatus(`${board.title} 目前只允许 ${allowedEmails.join("、")} 登录或注册。`, "neutral");
   }
 
   elements.authModal.hidden = false;
   document.body.classList.add("modal-open");
-  elements.authEmail.focus();
+  if (allowedEmails.length === 0) {
+    elements.authSubmit.disabled = true;
+  } else {
+    elements.authSubmit.disabled = false;
+    elements.authPassword.focus();
+  }
 }
 
 function closeAuthModal() {
@@ -902,17 +958,30 @@ function closeAuthModal() {
 }
 
 function ensureMessageAuth(boardId) {
-  if (isMessageAuthenticated()) return true;
+  if (isMessageAuthenticated(boardId)) return true;
 
   openAuthModal(boardId);
   return false;
 }
 
-async function sendMagicLink() {
+async function submitPasswordAuth() {
   const email = normalizeEmail(elements.authEmail.value);
+  const password = elements.authPassword.value;
+  const boardId = authState.pendingBoardId;
+  const board = getBoard(boardId);
 
-  if (!isAllowedMessageEmail(email)) {
-    setAuthStatus("这个邮箱还不在鹅兔留言名单里。", "error");
+  if (!board || !isBoardAuthConfigured(board.id)) {
+    setAuthStatus("这个留言板还没有开放注册/登录。", "error");
+    return;
+  }
+
+  if (!isAllowedMessageEmail(email, board.id)) {
+    setAuthStatus(`${board.title} 只能使用 ${getBoardAllowedEmails(board.id).join("、")}。`, "error");
+    return;
+  }
+
+  if (password.length < 6) {
+    setAuthStatus("密码至少需要 6 位。", "error");
     return;
   }
 
@@ -924,28 +993,61 @@ async function sendMagicLink() {
   setAuthSubmitLoading(true);
   setAuthStatus("", "neutral");
 
-  const { error } = await authState.client.auth.signInWithOtp({
+  if (authState.mode === "signUp") {
+    const { data, error } = await authState.client.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: getAuthRedirectURL(),
+        data: {
+          board_id: board.id,
+          display_name: board.owner,
+        },
+      },
+    });
+
+    setAuthSubmitLoading(false);
+
+    if (error) {
+      setAuthStatus("注册失败。这个邮箱可能已经注册过，或密码不符合 Supabase 设置。", "error");
+      return;
+    }
+
+    if (data.session) {
+      authState.session = data.session;
+      updateAuthDependentUI();
+      closeAuthModal();
+      openMessageModal(board.id);
+      return;
+    }
+
+    setAuthStatus("注册邮件已发送。请先去邮箱完成验证，再回到这里用密码登录。", "success");
+    setAuthMode("signIn");
+    return;
+  }
+
+  const { data, error } = await authState.client.auth.signInWithPassword({
     email,
-    options: {
-      emailRedirectTo: getAuthRedirectURL(),
-      shouldCreateUser: false,
-    },
+    password,
   });
 
   setAuthSubmitLoading(false);
 
   if (error) {
-    setAuthStatus("登录链接没有发出去。请确认这个邮箱已经在 Supabase Auth 里创建。", "error");
+    setAuthStatus("登录失败。请确认邮箱、密码正确，并且已经完成邮箱验证。", "error");
     return;
   }
 
-  setAuthStatus("登录链接已发送，去邮箱点开后会回到留言小窝。", "success");
+  authState.session = data.session;
+  updateAuthDependentUI();
+  closeAuthModal();
+  openMessageModal(board.id);
 }
 
 async function signOutMessageAuth() {
   if (!authState.client) return;
 
-  await authState.client.auth.signOut();
+  await authState.client.auth.signOut({ scope: "local" });
   authState.session = null;
   closeMessageModal();
   updateAuthDependentUI();
@@ -965,7 +1067,8 @@ function updateMessageAuthStatus() {
   }
 
   const email = getCurrentAuthEmail();
-  const statusText = isAllowedMessageEmail(email)
+  const boardId = messageState.activeBoardId;
+  const statusText = isAllowedMessageEmail(email, boardId)
     ? `已登录：${email}`
     : `当前邮箱不在允许名单：${email}`;
 
@@ -980,7 +1083,14 @@ function bindAuthModal() {
 
   elements.authForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    sendMagicLink();
+    submitPasswordAuth();
+  });
+
+  elements.authModeTabs.addEventListener("click", (event) => {
+    const modeButton = event.target.closest("[data-auth-mode]");
+    if (!modeButton) return;
+
+    setAuthMode(modeButton.dataset.authMode);
   });
 
   elements.authModal.addEventListener("click", (event) => {
@@ -1085,11 +1195,11 @@ function getLatestMessageText(messages) {
 function renderMessageBoards() {
   if (!elements.messageBoardGrid) return;
 
-  const canViewMessages = isMessageAuthenticated();
-
   elements.messageBoardGrid.innerHTML = appData.messageBoards
     .map((board) => {
       const messages = getBoardMessages(board.id);
+      const canViewMessages = isMessageAuthenticated(board.id);
+      const isConfigured = isBoardAuthConfigured(board.id);
 
       return `
         <button class="message-board-card message-board-card-${board.accent} ${canViewMessages ? "" : "is-locked"}" type="button" data-board-id="${board.id}">
@@ -1103,8 +1213,8 @@ function renderMessageBoards() {
             ${canViewMessages
           ? `<span><b>${messages.length}</b> 条留言</span>
                 <small>${getLatestMessageText(messages)}</small>`
-          : `<span><b>Private</b></span>
-                <small>登录后查看留言</small>`}
+          : `<span><b>${isConfigured ? "Private" : "Pending"}</b></span>
+                <small>${isConfigured ? "登录后查看留言" : "等待设置邮箱"}</small>`}
           </span>
         </button>
       `;
