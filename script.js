@@ -49,6 +49,9 @@ const appData = {
     },
     {
       id: "first-day",
+      title: "第一天",
+      artist: "孙燕姿",
+      src: "assets/musics/第一天-孙燕姿.mp3",
     }
   ],
   messageAuthors: [
