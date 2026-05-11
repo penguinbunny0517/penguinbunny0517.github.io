@@ -24,9 +24,10 @@
       </a>
       <div class="header-actions">
         <nav class="site-nav" aria-label="页面导航">
-          <a href="#map">距离地图</a>
-          <a href="#trips">旅行足迹</a>
-          <a href="#timeline">鹅兔时间线</a>
+          <a href="#map">我们的距离地图</a>
+          <a href="#trips">一起旅行过的地方</a>
+          <a href="#timeline">恋爱时间胶卷</a>
+          <a href="#messages">异地留言</a>
           <a href="#next">下一次见面</a>
         </nav>
 
@@ -99,6 +100,19 @@
         </div>
       </section>
 
+      <section class="messages-section" id="messages" aria-labelledby="messages-title">
+        <div class="section-inner">
+          <div class="section-heading messages-heading">
+            <div>
+              <p class="section-kicker">Long Distance Notes</p>
+              <h2 id="messages-title">异地留言小窝</h2>
+            </div>
+            <p class="messages-note">把今天的小事，放进对方的口袋里。</p>
+          </div>
+          <div class="message-board-grid" id="messageBoardGrid"></div>
+        </div>
+      </section>
+
       <section class="next-section" id="next" aria-labelledby="next-title">
         <div class="section-inner next-layout">
           <div class="next-copy">
@@ -134,8 +148,78 @@
     </article>
   </div>
 
+  <div class="message-modal" id="messageModal" hidden>
+    <div class="modal-backdrop" data-close-message-modal></div>
+    <article class="message-modal-card" role="dialog" aria-modal="true" aria-labelledby="messageModalTitle">
+      <button class="modal-close" type="button" aria-label="关闭留言板" data-close-message-modal></button>
+
+      <section class="message-compose-panel" aria-labelledby="messageModalTitle">
+        <p class="section-kicker">Little Mailbox</p>
+        <h2 id="messageModalTitle"></h2>
+        <p class="message-modal-subtitle" id="messageModalSubtitle"></p>
+        <div class="message-auth-status" id="messageAuthStatus" aria-live="polite"></div>
+
+        <form class="message-form" id="messageForm">
+          <div class="message-form-top">
+            <label class="message-author-field">
+              <span>当前身份</span>
+              <select id="messageAuthor" aria-label="选择留言身份"></select>
+            </label>
+            <span class="message-image-limit" id="messageImageLimit">0 / 6 张</span>
+          </div>
+
+          <textarea id="messageText" rows="5" maxlength="360" placeholder="写下今天想放进这里的话..."></textarea>
+
+          <div class="message-actions">
+            <label class="message-upload-button">
+              <span>选择图片</span>
+              <input id="messageImages" type="file" accept="image/*" multiple>
+            </label>
+            <button class="message-submit" id="messageSubmit" type="submit">留言</button>
+            <button class="message-cancel-edit" id="messageCancelEdit" type="button" hidden>取消编辑</button>
+          </div>
+
+          <div class="message-preview" id="messagePreview" aria-label="已选择的图片"></div>
+          <p class="message-form-hint" id="messageFormHint" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="message-feed-panel" aria-labelledby="messageFeedTitle">
+        <div class="message-feed-head">
+          <div>
+            <p class="section-kicker">Message Feed</p>
+            <h3 id="messageFeedTitle">留言记录</h3>
+          </div>
+          <span id="messageFeedCount">0 条</span>
+        </div>
+        <div class="message-list" id="messageList"></div>
+      </section>
+    </article>
+  </div>
+
+  <div class="auth-modal" id="authModal" hidden>
+    <div class="modal-backdrop" data-close-auth-modal></div>
+    <article class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="modal-close" type="button" aria-label="关闭登录" data-close-auth-modal></button>
+      <p class="section-kicker">Private Notes</p>
+      <h2 id="authTitle">鹅兔留言入口</h2>
+      <p class="auth-copy">
+        留言板只给麦麦和兔兔使用。先用邮箱收一封登录链接，点开后再回到这里。
+      </p>
+      <form class="auth-form" id="authForm">
+        <label>
+          <span>登录邮箱</span>
+          <input id="authEmail" type="email" autocomplete="email" required>
+        </label>
+        <button class="auth-submit" id="authSubmit" type="submit">发送登录链接</button>
+      </form>
+      <p class="auth-status" id="authStatus" aria-live="polite"></p>
+    </article>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
 
