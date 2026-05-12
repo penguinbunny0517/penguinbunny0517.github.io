@@ -14,6 +14,8 @@
   --shadow: 0 24px 80px rgba(82, 58, 54, 0.14);
   --small-shadow: 0 12px 35px rgba(82, 58, 54, 0.12);
   --radius: 8px;
+  --section-title-gap: 8px;
+  --section-block-padding: clamp(64px, 5.6vw, 84px);
   --font-body:
     "Noto Sans SC",
     "PingFang SC",
@@ -39,10 +41,12 @@
 }
 
 html {
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
 body {
+  overflow-x: hidden;
   min-width: 320px;
   margin: 0;
   color: var(--ink);
@@ -262,6 +266,180 @@ main {
   display: none;
 }
 
+.music-now {
+  display: grid;
+  gap: 2px;
+  padding: 10px 11px;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(134, 184, 199, 0.16), rgba(243, 202, 114, 0.14)),
+    rgba(255, 253, 248, 0.72);
+}
+
+.music-now span,
+.music-now small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-now span {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.music-now small {
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 1.25;
+}
+
+.music-control-panel {
+  display: grid;
+  gap: 9px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 253, 248, 0.62);
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.music-control-button {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(134, 184, 199, 0.16);
+  color: var(--blue-deep);
+  cursor: pointer;
+  font-family: var(--font-accent);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.music-control-button-main {
+  width: 38px;
+  height: 38px;
+  background: var(--coral);
+  color: #fffdf8;
+  font-size: 15px;
+  box-shadow: 0 10px 22px rgba(201, 91, 82, 0.2);
+}
+
+.music-control-button:hover,
+.music-control-button:focus-visible {
+  outline: none;
+  background: rgba(134, 184, 199, 0.26);
+  transform: translateY(-1px);
+}
+
+.music-control-button-main:hover,
+.music-control-button-main:focus-visible {
+  background: var(--coral-dark);
+}
+
+.music-progress {
+  display: grid;
+  gap: 5px;
+}
+
+.music-progress-range {
+  position: relative;
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+
+.music-progress-range::before,
+.music-progress-fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 5px;
+  content: "";
+  border-radius: 999px;
+  transform: translateY(-50%);
+}
+
+.music-progress-range::before {
+  right: 0;
+  background: rgba(127, 107, 102, 0.18);
+}
+
+.music-progress-fill {
+  z-index: 1;
+  width: 0;
+  background: linear-gradient(90deg, var(--coral), var(--butter));
+  pointer-events: none;
+}
+
+.music-progress-thumb {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #fffdf8;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: 0 6px 14px rgba(201, 91, 82, 0.24);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.music-progress-range:hover .music-progress-thumb,
+.music-progress-range:focus-visible .music-progress-thumb {
+  box-shadow: 0 8px 18px rgba(201, 91, 82, 0.3);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.music-progress-range:focus-visible {
+  outline: none;
+}
+
+.music-progress-range:focus-visible::before {
+  box-shadow: 0 0 0 3px rgba(238, 129, 119, 0.16);
+}
+
+.music-progress-range[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.42;
+}
+
+.music-progress-row {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(127, 107, 102, 0.78);
+  font-family: var(--font-accent);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+}
+
 .music-volume {
   display: grid;
   gap: 9px;
@@ -364,25 +542,6 @@ main {
   min-height: 90svh;
   margin: 0 auto;
   padding: 108px 0 clamp(30px, 4.5vw, 54px);
-}
-
-.hero-section::after {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  bottom: -58px;
-  width: 100vw;
-  height: 124px;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(247, 239, 229, 0) 0%,
-      rgba(255, 253, 248, 0.46) 38%,
-      rgba(255, 253, 248, 0.74) 100%
-    );
-  transform: translateX(-50%);
 }
 
 .hero-copy {
@@ -664,9 +823,10 @@ main {
 
 .location-pill {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  column-gap: 12px;
+  row-gap: 4px;
   min-width: 0;
   padding: 12px 14px;
   border-radius: 8px;
@@ -674,6 +834,8 @@ main {
 }
 
 .location-pill strong {
+  grid-column: 1;
+  grid-row: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -686,21 +848,31 @@ main {
   font-weight: 500;
 }
 
-.location-pill span {
+.location-meta {
   display: grid;
-  gap: 2px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  column-gap: 12px;
   min-width: 0;
+  overflow: visible;
+  align-items: baseline;
+}
+
+.location-meta span {
   overflow: hidden;
   color: var(--muted);
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 300;
-  text-align: right;
+  text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .location-clock {
+  grid-column: 2;
+  grid-row: 1;
   display: inline-grid;
   place-items: center;
   min-width: 82px;
@@ -721,19 +893,23 @@ main {
   white-space: nowrap;
 }
 
-.location-pill small {
-  overflow: hidden;
+.location-meta small {
+  overflow: visible;
   color: rgba(127, 107, 102, 0.78);
   font-family: var(--font-accent);
   font-size: 10px;
   font-weight: 800;
   line-height: 1.1;
-  text-overflow: ellipsis;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .trips-section {
   position: relative;
-  padding: clamp(58px, 5vw, 76px) 0 clamp(74px, 7vw, 96px);
+  display: grid;
+  align-items: center;
+  align-content: center;
+  padding: var(--section-block-padding) 0;
   background:
     linear-gradient(
       180deg,
@@ -743,29 +919,11 @@ main {
     );
 }
 
-.trips-section::before {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: -58px;
-  width: 100vw;
-  height: 96px;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(247, 239, 229, 0) 0%,
-      rgba(255, 253, 248, 0.5) 48%,
-      rgba(255, 253, 248, 0.72) 100%
-    );
-  transform: translateX(-50%);
-}
-
 .section-inner {
   position: relative;
   z-index: 1;
   width: min(1120px, calc(100% - 36px));
+  min-width: 0;
   margin: 0 auto;
 }
 
@@ -775,6 +933,37 @@ main {
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 24px;
+}
+
+.section-heading-title {
+  display: grid;
+  gap: var(--section-title-gap);
+  min-width: 0;
+}
+
+.section-heading-title .section-kicker {
+  margin: 0;
+}
+
+.section-heading-title-right {
+  justify-items: end;
+  text-align: right;
+}
+
+.section-side-note {
+  max-width: 20rem;
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.trips-heading,
+.messages-heading {
+  margin-bottom: 34px;
 }
 
 .trip-grid {
@@ -945,7 +1134,10 @@ main {
 
 .timeline-section {
   position: relative;
-  padding: clamp(82px, 7vw, 104px) 0 clamp(76px, 7vw, 98px);
+  display: grid;
+  align-items: center;
+  align-content: center;
+  padding: var(--section-block-padding) 0;
   background:
     linear-gradient(180deg, rgba(251, 244, 235, 0.7), rgba(247, 239, 229, 0.66)),
     rgba(255, 249, 241, 0.72);
@@ -962,25 +1154,6 @@ main {
     linear-gradient(90deg, transparent 0 20px, rgba(238, 129, 119, 0.18) 20px 23px, transparent 23px 48px),
     linear-gradient(rgba(72, 125, 140, 0.08) 1px, transparent 1px);
   background-size: 96px 100%, 100% 34px;
-}
-
-.timeline-section::after {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: -72px;
-  width: 100vw;
-  height: 128px;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 253, 248, 0) 0%,
-      rgba(251, 244, 235, 0.7) 64%,
-      rgba(247, 239, 229, 0.66) 100%
-    );
-  transform: translateX(-50%);
 }
 
 .timeline-section .section-inner {
@@ -1006,6 +1179,8 @@ main {
 .timeline-track {
   position: relative;
   display: flex;
+  width: 100%;
+  min-width: 0;
   gap: 20px;
   align-items: stretch;
   overflow-x: auto;
@@ -1024,6 +1199,9 @@ main {
 
 .timeline-viewport {
   position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
 }
 
@@ -1178,30 +1356,14 @@ main {
 
 .messages-section {
   position: relative;
-  padding: clamp(78px, 7vw, 102px) 0 clamp(78px, 7vw, 102px);
+  display: grid;
+  align-items: center;
+  align-content: center;
+  padding: var(--section-block-padding) 0;
   background:
     linear-gradient(180deg, rgba(247, 239, 229, 0.66), rgba(255, 249, 241, 0.72) 54%, rgba(246, 242, 235, 0.76)),
     linear-gradient(110deg, rgba(238, 129, 119, 0.16), rgba(134, 184, 199, 0.18) 48%, rgba(169, 216, 192, 0.18)),
     rgba(255, 249, 241, 0.78);
-}
-
-.messages-section::before {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: -70px;
-  width: 100vw;
-  height: 118px;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(247, 239, 229, 0) 0%,
-      rgba(247, 239, 229, 0.6) 54%,
-      rgba(255, 249, 241, 0.72) 100%
-    );
-  transform: translateX(-50%);
 }
 
 .messages-section .section-inner {
@@ -1210,14 +1372,14 @@ main {
 }
 
 .messages-note {
-  max-width: 18rem;
+  max-width: 20rem;
   margin: 0;
   color: var(--muted);
   font-family: var(--font-body);
   font-size: 16px;
   font-weight: 300;
   line-height: 1.65;
-  text-align: right;
+  text-align: left;
 }
 
 .message-board-grid {
@@ -1388,30 +1550,14 @@ main {
 
 .next-section {
   position: relative;
-  padding: clamp(78px, 7vw, 102px) 0 72px;
+  display: grid;
+  align-items: center;
+  align-content: center;
+  padding: var(--section-block-padding) 0;
   background:
     linear-gradient(180deg, rgba(246, 242, 235, 0.72), rgba(255, 249, 241, 0.72) 42%),
     linear-gradient(90deg, rgba(134, 184, 199, 0.2), rgba(238, 129, 119, 0.16)),
     rgba(255, 249, 241, 0.72);
-}
-
-.next-section::before {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: -70px;
-  width: 100vw;
-  height: 118px;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(247, 239, 229, 0) 0%,
-      rgba(247, 239, 229, 0.62) 52%,
-      rgba(255, 249, 241, 0.72) 100%
-    );
-  transform: translateX(-50%);
 }
 
 .next-layout {
@@ -2405,6 +2551,10 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
     text-align: left;
   }
 
+  .section-side-note {
+    max-width: none;
+  }
+
   .messages-note {
     max-width: none;
     text-align: left;
@@ -2505,6 +2655,11 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
     flex-direction: column;
   }
 
+  .section-heading-title-right {
+    justify-items: start;
+    text-align: left;
+  }
+
   .distance-badge {
     width: 100%;
     text-align: left;
@@ -2523,10 +2678,10 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   }
 
   .location-pill strong {
-    grid-column: 1 / -1;
+    grid-column: 1;
   }
 
-  .location-pill span {
+  .location-meta span {
     text-align: left;
   }
 
@@ -2538,28 +2693,11 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
     width: min(100% - 24px, 520px);
   }
 
-  .hero-section::after {
-    bottom: -54px;
-    height: 106px;
-  }
-
-  .trips-section::before,
-  .timeline-section::after,
-  .next-section::before {
-    top: -54px;
-    height: 92px;
-  }
-
   .next-section,
   .trips-section,
   .timeline-section,
   .messages-section {
-    padding-block: 58px 52px;
-  }
-
-  .messages-section::before {
-    top: -54px;
-    height: 92px;
+    padding-block: 54px;
   }
 
   .message-board-card {

@@ -13,7 +13,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=no-section-transitions-20260513">
 </head>
 
 <body>
@@ -30,9 +30,9 @@
       <div class="header-actions">
         <nav class="site-nav" aria-label="页面导航">
           <a href="#map">我们的距离地图</a>
-          <a href="#trips">一起旅行过的地方</a>
-          <a href="#timeline">恋爱时间胶卷</a>
-          <a href="#messages">异地留言</a>
+          <a href="#trips">旅行回忆相册</a>
+          <a href="#timeline">恋爱时光胶卷</a>
+          <a href="#messages">异地留言小窝</a>
           <a href="#next">下一次见面</a>
         </nav>
 
@@ -43,7 +43,7 @@
             <span id="musicLabel"></span>
           </button>
           <div class="music-menu" id="musicMenu" hidden></div>
-          <audio id="bgmAudio" preload="metadata"></audio>
+          <audio id="bgmAudio" preload="auto"></audio>
         </div>
       </div>
     </header>
@@ -53,7 +53,7 @@
         <div class="hero-copy">
           <p class="kicker">Our Huge and Tiny World</p>
           <h1 id="hero-title">
-            <span>把大洋两岸</span>
+            <span>把大大世界</span>
             <span>折成我们的</span>
             <span>小小地图。</span>
           </h1>
@@ -64,7 +64,7 @@
 
         <section class="map-workbench" id="map" aria-labelledby="map-title">
           <div class="map-heading">
-            <div>
+            <div class="section-heading-title">
               <p class="section-kicker">Current Distance</p>
               <h2 id="map-title">我们的距离地图</h2>
             </div>
@@ -82,9 +82,12 @@
 
       <section class="trips-section" id="trips" aria-labelledby="trips-title">
         <div class="section-inner">
-          <div class="section-heading">
-            <p class="section-kicker">Travel Memories</p>
-            <h2 id="trips-title">一起旅行过的地方</h2>
+          <div class="section-heading trips-heading">
+            <p class="section-side-note trips-note">我们一起追风，看海，行于四季。</p>
+            <div class="section-heading-title section-heading-title-right">
+              <p class="section-kicker">Travel Memories</p>
+              <h2 id="trips-title">旅行回忆相册</h2>
+            </div>
           </div>
           <div class="trip-grid" id="tripGrid"></div>
         </div>
@@ -93,9 +96,9 @@
       <section class="timeline-section" id="timeline" aria-labelledby="timeline-title">
         <div class="section-inner">
           <div class="section-heading timeline-heading">
-            <div>
+            <div class="section-heading-title">
               <p class="section-kicker">Our Love Timeline</p>
-              <h2 id="timeline-title">恋爱时间胶卷</h2>
+              <h2 id="timeline-title">恋爱时光胶卷</h2>
             </div>
             <p class="timeline-note">从相识那天起，每一格都亮晶晶。</p>
           </div>
@@ -108,11 +111,11 @@
       <section class="messages-section" id="messages" aria-labelledby="messages-title">
         <div class="section-inner">
           <div class="section-heading messages-heading">
-            <div>
+            <p class="section-side-note messages-note">把今天的小事，放进对方的口袋里。</p>
+            <div class="section-heading-title section-heading-title-right">
               <p class="section-kicker">Long Distance Notes</p>
               <h2 id="messages-title">异地留言小窝</h2>
             </div>
-            <p class="messages-note">把今天的小事，放进对方的口袋里。</p>
           </div>
           <div class="message-board-grid" id="messageBoardGrid"></div>
         </div>
@@ -121,8 +124,10 @@
       <section class="next-section" id="next" aria-labelledby="next-title">
         <div class="section-inner next-layout">
           <div class="next-copy">
-            <p class="section-kicker">Next Hug</p>
-            <h2 id="next-title">下一次见面</h2>
+            <div class="section-heading-title">
+              <p class="section-kicker">Next Hug</p>
+              <h2 id="next-title">下一次见面</h2>
+            </div>
             <p id="nextMeetText">待设定</p>
           </div>
           <button class="miss-button" id="missButton" type="button">
@@ -225,7 +230,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
+  <script src="script.js?v=loading-copy-20260513"></script>
 </body>
 
 </html>

@@ -5,11 +5,11 @@ const appData = {
       name: "麦麦小鹅 🩶",
       animal: "penguin",
       location: {
-        label: "美国·北卡罗莱纳州·达勒姆",
-        city: "达勒姆",
-        lat: 35.9833,
-        lng: -78.9,
-        timeZone: "America/New_York",
+        label: "",
+        city: "",
+        lat: 39.9725,
+        lng: 116.318,
+        timeZone: "Asia/Shanghai",
       },
       note: "",
     },
@@ -18,10 +18,10 @@ const appData = {
       name: "兔兔公主 🧡",
       animal: "rabbit",
       location: {
-        label: "中国·北京",
-        city: "北京",
-        lat: 39.9042,
-        lng: 116.4074,
+        label: "",
+        city: "",
+        lat: 39.810167,
+        lng: 116.110999,
         timeZone: "Asia/Shanghai",
       },
       note: "",
@@ -98,7 +98,7 @@ const appData = {
     {
       id: "dalian",
       place: "大连",
-      shortName: "中国·大连",
+      shortName: "中国 · 大连",
       englishTitle: "Dalian",
       date: "2025.10.04 - 2025.10.08",
       season: "海风和黄昏",
@@ -121,7 +121,7 @@ const appData = {
     {
       id: "beijing-zoo",
       place: "北京野生动物园",
-      shortName: "中国·北京·野生动物园",
+      shortName: "中国 · 北京 · 野生动物园",
       englishTitle: "Beijing Wildlife Park",
       date: "2025.11.16",
       season: "动物和晴天",
@@ -132,7 +132,7 @@ const appData = {
     {
       id: "tianjin",
       place: "天津",
-      shortName: "中国·天津",
+      shortName: "中国 · 天津",
       englishTitle: "Tianjin",
       date: "2025.12.13 - 2025.12.14",
       season: "城市和烟火",
@@ -143,7 +143,7 @@ const appData = {
     {
       id: "universal",
       place: "北京环球影城",
-      shortName: "中国·北京·环球影城",
+      shortName: "中国 · 北京 · 环球影城",
       englishTitle: "Universal Beijing Resort",
       date: "2026.02.28",
       season: "魔法和拥抱",
@@ -154,7 +154,7 @@ const appData = {
     {
       id: "jeju",
       place: "济州岛",
-      shortName: "韩国·济州岛",
+      shortName: "韩国 · 济州岛",
       englishTitle: "Jeju Island",
       date: "2026.03.25 - 2026.03.29",
       season: "橘子和海岸线",
@@ -223,7 +223,7 @@ const appData = {
     {
       date: "2025.10.18",
       tag: "一起去圆明园～",
-      text: "\"I can take you far far away, faw enough for us to dissappear.\"",
+      text: "\"I can take you far far away, far enough for us to dissappear.\"",
     },
     {
       date: "2025.11.16",
@@ -232,7 +232,7 @@ const appData = {
     },
     {
       date: "2025.12.12",
-      tag: "一起过第一次初雪 ❄️",
+      tag: "一起过第一次初雪～ ❄️",
       text: "小鹅冰面滑行失败，小兔直接倒下开睡！",
     },
     {
@@ -242,7 +242,7 @@ const appData = {
     },
     {
       date: "2026.01.01",
-      tag: "第一次一起跨年",
+      tag: "第一次一起跨年！",
       text: "喜欢和香香软软的兔一起泡私汤～",
     },
     {
@@ -253,7 +253,7 @@ const appData = {
     {
       date: "2026.03.25-2026.03.29",
       tag: "Kiss in Jeju! 🍊",
-      text: "\"나가서 바람이나 좀 쐐, 아무도 찾지 않는 곳에.\"",
+      text: "\"나가서 바람이나 좀 쐐, 아무도 찾지 않는 곳에.\""
     },
     {
       date: "2026.04.19",
@@ -278,9 +278,13 @@ const musicState = {
   currentId: null,
   isMenuOpen: false,
   isPlaying: false,
+  isSeeking: false,
+  resolvedTrackUrls: new Map(),
+  resolvingTrackUrls: new Map(),
   volume: 0.58,
 };
 
+const GEOCODE_CACHE_KEY = "penguinBunnyReverseGeocodeV2";
 const MESSAGE_STORAGE_KEY = "penguinBunnyMessagesLocalV2";
 const MAX_MESSAGE_IMAGES = 6;
 
@@ -383,7 +387,173 @@ function renderDistance() {
 }
 
 function formatCoordinate(location) {
-  return `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`;
+  return `北纬 ${location.lat.toFixed(3)}°，东经 ${location.lng.toFixed(3)}°`;
+}
+
+function getLocationLabel(person) {
+  return person.location.label || "地图定位中...";
+}
+
+function getLocationCity(person) {
+  return person.location.city || getLocationLabel(person);
+}
+
+function getGeocodeCache() {
+  try {
+    return JSON.parse(localStorage.getItem(GEOCODE_CACHE_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function setGeocodeCache(cache) {
+  try {
+    localStorage.setItem(GEOCODE_CACHE_KEY, JSON.stringify(cache));
+  } catch {
+    // Reverse geocoding still works without cache.
+  }
+}
+
+function getGeocodeCacheKey(location) {
+  return `${location.lat.toFixed(6)},${location.lng.toFixed(6)}`;
+}
+
+function uniqueLocationParts(parts) {
+  const seen = new Set();
+
+  return parts
+    .map((part) => String(part || "").trim())
+    .filter(Boolean)
+    .filter((part) => {
+      const normalized = part.replace(/市$/, "");
+      if (seen.has(normalized)) return false;
+      seen.add(normalized);
+      return true;
+    });
+}
+
+function cleanLocationPart(part) {
+  return String(part || "").trim();
+}
+
+function stripLocationSuffix(part) {
+  return cleanLocationPart(part).replace(/[省市自治区特别行政区]+$/g, "");
+}
+
+function isSameLocationPart(a, b) {
+  return stripLocationSuffix(a) === stripLocationSuffix(b);
+}
+
+function getDisplayNameParts(result) {
+  return String(result.display_name || "")
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function getMunicipalityFromParts(parts) {
+  const municipalities = ["北京市", "上海市", "天津市", "重庆市"];
+  return municipalities.find((municipality) => parts.some((part) => isSameLocationPart(part, municipality))) || "";
+}
+
+function getCityFromDisplayParts(parts, province) {
+  return (
+    parts.find((part) => /市$/.test(part) && !isSameLocationPart(part, province)) ||
+    parts.find((part) => /州$|盟$/.test(part) && !isSameLocationPart(part, province)) ||
+    ""
+  );
+}
+
+function formatReverseGeocodeLabel(result) {
+  const address = result.address || {};
+  const displayParts = getDisplayNameParts(result);
+  const country = cleanLocationPart(address.country) || displayParts[displayParts.length - 1] || "中国";
+  const municipality = getMunicipalityFromParts(displayParts);
+
+  if (municipality) {
+    return uniqueLocationParts([country, municipality]).join(" · ");
+  }
+
+  const province = cleanLocationPart(address.state || address.province);
+  const city =
+    cleanLocationPart(address.city || address.town) ||
+    getCityFromDisplayParts(displayParts, province);
+
+  return uniqueLocationParts([country, province, city]).join(" · ");
+}
+
+function formatReverseGeocodeCity(result, fallback) {
+  const address = result.address || {};
+  const displayParts = getDisplayNameParts(result);
+  const municipality = getMunicipalityFromParts(displayParts);
+
+  if (municipality) return municipality;
+
+  const province = cleanLocationPart(address.state || address.province);
+  const city =
+    cleanLocationPart(address.city || address.town) ||
+    getCityFromDisplayParts(displayParts, province);
+
+  return (
+    city ||
+    province ||
+    fallback ||
+    "当前位置"
+  );
+}
+
+async function reverseGeocodePerson(person) {
+  const { location } = person;
+  const cache = getGeocodeCache();
+  const cacheKey = getGeocodeCacheKey(location);
+
+  if (cache[cacheKey]) {
+    location.label = cache[cacheKey].label;
+    location.city = cache[cacheKey].city;
+    return;
+  }
+
+  const endpoint = new URL("https://nominatim.openstreetmap.org/reverse");
+  endpoint.searchParams.set("format", "jsonv2");
+  endpoint.searchParams.set("lat", String(location.lat));
+  endpoint.searchParams.set("lon", String(location.lng));
+  endpoint.searchParams.set("zoom", "18");
+  endpoint.searchParams.set("addressdetails", "1");
+  endpoint.searchParams.set("accept-language", "zh-CN,zh,en");
+
+  const response = await fetch(endpoint.toString(), {
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Reverse geocoding failed");
+  }
+
+  const result = await response.json();
+  const label = formatReverseGeocodeLabel(result) || "地图定位已生成";
+  const city = formatReverseGeocodeCity(result, label);
+
+  location.label = label;
+  location.city = city;
+  cache[cacheKey] = { label, city };
+  setGeocodeCache(cache);
+}
+
+async function resolveLocationLabels() {
+  await Promise.allSettled(
+    getPeople().map(async (person) => {
+      try {
+        await reverseGeocodePerson(person);
+      } catch {
+        person.location.label = "自动定位暂时不可用";
+        person.location.city = "当前位置";
+      }
+      renderLocationStrip();
+      syncMarkerContent(person.id);
+    }),
+  );
 }
 
 function renderLocationStrip() {
@@ -392,11 +562,11 @@ function renderLocationStrip() {
       (person) => `
         <div class="location-pill" data-person="${person.id}">
           <strong>${person.name}</strong>
-          <span class="location-details">
-            ${person.location.label}
+          <time class="location-clock" data-time-zone="${person.location.timeZone}" aria-label="${getLocationCity(person)}当前时间">--:--:--</time>
+          <div class="location-meta">
+            <span>${getLocationLabel(person)}</span>
             <small>${formatCoordinate(person.location)}</small>
-          </span>
-          <time class="location-clock" data-time-zone="${person.location.timeZone}" aria-label="${person.location.city}当前时间">--:--:--</time>
+          </div>
         </div>
       `,
     )
@@ -450,7 +620,7 @@ function createLocationIcon(personId) {
 function getLocationTooltip(person) {
   return `
     <strong>${person.name}</strong>
-    <span>${person.location.label}</span>
+    <span>${getLocationLabel(person)}</span>
     <small>${formatCoordinate(person.location)}</small>
   `;
 }
@@ -499,12 +669,14 @@ function updateMapRoute({ fit = false } = {}) {
   if (!fit) return;
 
   if (sameSpot) {
-    mapState.map.setView(points[0], 4);
+    mapState.map.setView(points[0], 12);
     return;
   }
 
+  const distance = getDistanceKm(penguin.location, rabbit.location);
+
   mapState.map.fitBounds(L.latLngBounds(points), {
-    maxZoom: 5,
+    maxZoom: distance < 50 ? 12 : distance < 300 ? 8 : 5,
     padding: [70, 106],
   });
 }
@@ -512,6 +684,7 @@ function updateMapRoute({ fit = false } = {}) {
 function initLeafletMap() {
   renderDistance();
   renderLocationStrip();
+  resolveLocationLabels();
 
   if (typeof L === "undefined") {
     elements.mapCanvas.innerHTML = '<p class="leaflet-fallback">真实地图暂时没有加载出来，检查网络后刷新就好。</p>';
@@ -558,11 +731,93 @@ function getCurrentTrack() {
   return appData.musicTracks.find((track) => track.id === musicState.currentId);
 }
 
+function getCurrentTrackIndex() {
+  return appData.musicTracks.findIndex((track) => track.id === musicState.currentId);
+}
+
+function getWrappedTrack(step) {
+  if (!appData.musicTracks.length) return null;
+
+  const currentIndex = getCurrentTrackIndex();
+  if (currentIndex < 0) return appData.musicTracks[0];
+
+  const baseIndex = currentIndex;
+  const nextIndex = (baseIndex + step + appData.musicTracks.length) % appData.musicTracks.length;
+
+  return appData.musicTracks[nextIndex];
+}
+
+function formatMusicTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+
+  return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+}
+
+function resolveMusicTrackUrl(track) {
+  if (!track) return Promise.resolve("");
+
+  if (musicState.resolvedTrackUrls.has(track.id)) {
+    return Promise.resolve(musicState.resolvedTrackUrls.get(track.id));
+  }
+
+  if (musicState.resolvingTrackUrls.has(track.id)) {
+    return musicState.resolvingTrackUrls.get(track.id);
+  }
+
+  const pendingUrl = fetch(track.src)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to load ${track.src}`);
+      }
+      return response.blob();
+    })
+    .then((blob) => {
+      const objectUrl = URL.createObjectURL(blob);
+      musicState.resolvedTrackUrls.set(track.id, objectUrl);
+      musicState.resolvingTrackUrls.delete(track.id);
+      return objectUrl;
+    })
+    .catch(() => {
+      musicState.resolvedTrackUrls.set(track.id, track.src);
+      musicState.resolvingTrackUrls.delete(track.id);
+      return track.src;
+    });
+
+  musicState.resolvingTrackUrls.set(track.id, pendingUrl);
+  return pendingUrl;
+}
+
+function preloadMusicTrackUrls() {
+  appData.musicTracks.forEach((track) => {
+    resolveMusicTrackUrl(track);
+  });
+}
+
 function updateMusicDisplay() {
   const currentTrack = getCurrentTrack();
 
   elements.musicToggle.classList.toggle("is-playing", musicState.isPlaying);
   elements.musicLabel.textContent = currentTrack ? currentTrack.title : "";
+
+  const nowTitle = document.querySelector("#musicNowTitle");
+  const nowArtist = document.querySelector("#musicNowArtist");
+  const playToggle = document.querySelector("#musicPlayToggle");
+
+  if (nowTitle) {
+    nowTitle.textContent = currentTrack ? currentTrack.title : "还没有选择歌曲";
+  }
+
+  if (nowArtist) {
+    nowArtist.textContent = currentTrack ? currentTrack.artist : "从下面的歌单里选一首开始播放";
+  }
+
+  if (playToggle) {
+    playToggle.textContent = musicState.isPlaying ? "⏸" : "▶";
+    playToggle.setAttribute("aria-label", musicState.isPlaying ? "暂停音乐" : "播放音乐");
+  }
 
   document.querySelectorAll(".music-option").forEach((option) => {
     const isActive = option.dataset.musicId === musicState.currentId;
@@ -587,6 +842,86 @@ function updateVolumeDisplay() {
   }
 }
 
+function updateMusicProgress() {
+  const progressTrack = document.querySelector("#musicProgress");
+  const progressFill = document.querySelector("#musicProgressFill");
+  const progressThumb = document.querySelector("#musicProgressThumb");
+  const currentTimeLabel = document.querySelector("#musicCurrentTime");
+  const durationLabel = document.querySelector("#musicDuration");
+  const duration = elements.bgmAudio.duration;
+  const currentTime = elements.bgmAudio.currentTime;
+  const hasDuration = Number.isFinite(duration) && duration > 0;
+  const boundedCurrentTime = hasDuration ? Math.min(Math.max(currentTime || 0, 0), duration) : 0;
+  const percent = hasDuration ? (boundedCurrentTime / duration) * 100 : 0;
+
+  if (progressTrack) {
+    progressTrack.setAttribute("aria-disabled", String(!hasDuration));
+    progressTrack.setAttribute("aria-valuemax", String(Math.floor(hasDuration ? duration : 100)));
+    progressTrack.setAttribute("aria-valuenow", String(Math.floor(boundedCurrentTime)));
+    progressTrack.setAttribute(
+      "aria-valuetext",
+      hasDuration ? `${formatMusicTime(boundedCurrentTime)} / ${formatMusicTime(duration)}` : "还没有歌曲时长",
+    );
+  }
+
+  if (progressFill) {
+    progressFill.style.width = `${percent}%`;
+  }
+
+  if (progressThumb) {
+    progressThumb.style.left = `${percent}%`;
+  }
+
+  if (currentTimeLabel) {
+    currentTimeLabel.textContent = formatMusicTime(boundedCurrentTime);
+  }
+
+  if (durationLabel) {
+    durationLabel.textContent = hasDuration ? formatMusicTime(duration) : "0:00";
+  }
+}
+
+function seekMusicTo(value) {
+  const duration = elements.bgmAudio.duration;
+  if (!Number.isFinite(duration) || duration <= 0) return;
+
+  const nextTime = Math.min(Math.max(Number(value), 0), duration);
+  if (Number.isFinite(nextTime)) {
+    elements.bgmAudio.currentTime = nextTime;
+    updateMusicProgress();
+  }
+}
+
+function seekMusicFromPointer(clientX) {
+  const progressTrack = document.querySelector("#musicProgress");
+  const duration = elements.bgmAudio.duration;
+
+  if (!progressTrack || !Number.isFinite(duration) || duration <= 0) return;
+
+  const rect = progressTrack.getBoundingClientRect();
+  const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+
+  seekMusicTo(ratio * duration);
+}
+
+function seekMusicFromProgressEvent(event) {
+  const progressTrack = document.querySelector("#musicProgress");
+  const duration = elements.bgmAudio.duration;
+
+  if (!progressTrack || !Number.isFinite(duration) || duration <= 0) return;
+
+  const rect = progressTrack.getBoundingClientRect();
+  const localX = Number.isFinite(event.offsetX) ? event.offsetX : event.clientX - rect.left;
+  const ratio = Math.min(Math.max(localX / rect.width, 0), 1);
+
+  seekMusicTo(ratio * duration);
+}
+
+function canSeekMusic() {
+  const duration = elements.bgmAudio.duration;
+  return Number.isFinite(duration) && duration > 0;
+}
+
 function setMusicMenuOpen(isOpen) {
   musicState.isMenuOpen = isOpen;
   elements.musicMenu.hidden = !isOpen;
@@ -596,6 +931,38 @@ function setMusicMenuOpen(isOpen) {
 
 function renderMusicMenu() {
   elements.musicMenu.innerHTML = `
+    <div class="music-now">
+      <span id="musicNowTitle">还没有选择歌曲</span>
+      <small id="musicNowArtist">从下面的歌单里选一首开始播放</small>
+    </div>
+    <div class="music-control-panel">
+      <div class="music-controls" aria-label="音乐播放控制">
+        <button class="music-control-button" id="musicPrev" type="button" aria-label="上一首">⏮</button>
+        <button class="music-control-button music-control-button-main" id="musicPlayToggle" type="button" aria-label="播放音乐">▶</button>
+        <button class="music-control-button" id="musicNext" type="button" aria-label="下一首">⏭</button>
+      </div>
+      <div class="music-progress">
+        <div
+          id="musicProgress"
+          class="music-progress-range"
+          role="slider"
+          tabindex="0"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          aria-valuetext="还没有歌曲时长"
+          aria-disabled="true"
+          aria-label="音乐播放进度"
+        >
+          <span class="music-progress-fill" id="musicProgressFill"></span>
+          <span class="music-progress-thumb" id="musicProgressThumb"></span>
+        </div>
+        <div class="music-progress-row">
+          <span id="musicCurrentTime">0:00</span>
+          <span id="musicDuration">0:00</span>
+        </div>
+      </div>
+    </div>
     <div class="music-volume">
       <div class="music-volume-row">
         <span>音量</span>
@@ -631,37 +998,175 @@ function renderMusicMenu() {
     updateVolumeDisplay();
   });
 
+  document.querySelector("#musicPrev").addEventListener("click", playPreviousMusicTrack);
+  document.querySelector("#musicNext").addEventListener("click", playNextMusicTrack);
+  document.querySelector("#musicPlayToggle").addEventListener("click", toggleCurrentMusicTrack);
+
+  const progressTrack = document.querySelector("#musicProgress");
+  const startProgressSeek = (clientX) => {
+    if (!canSeekMusic()) return false;
+    musicState.isSeeking = true;
+    seekMusicFromPointer(clientX);
+    return true;
+  };
+  const finishProgressSeek = (clientX) => {
+    if (canSeekMusic() && Number.isFinite(clientX)) {
+      seekMusicFromPointer(clientX);
+    }
+    musicState.isSeeking = false;
+    updateMusicProgress();
+  };
+
+  progressTrack.addEventListener("click", (event) => {
+    if (progressTrack.getAttribute("aria-disabled") === "true") return;
+    seekMusicFromProgressEvent(event);
+  });
+  progressTrack.addEventListener("pointerdown", (event) => {
+    if (progressTrack.getAttribute("aria-disabled") === "true" || !canSeekMusic()) return;
+    event.preventDefault();
+    musicState.isSeeking = true;
+    seekMusicFromProgressEvent(event);
+    progressTrack.setPointerCapture(event.pointerId);
+  });
+  progressTrack.addEventListener("pointermove", (event) => {
+    if (!musicState.isSeeking) return;
+    event.preventDefault();
+    seekMusicFromProgressEvent(event);
+  });
+  progressTrack.addEventListener("pointerup", (event) => {
+    if (progressTrack.hasPointerCapture(event.pointerId)) {
+      progressTrack.releasePointerCapture(event.pointerId);
+    }
+    seekMusicFromProgressEvent(event);
+    musicState.isSeeking = false;
+    updateMusicProgress();
+  });
+  progressTrack.addEventListener("pointercancel", () => {
+    musicState.isSeeking = false;
+    updateMusicProgress();
+  });
+  progressTrack.addEventListener("blur", () => {
+    musicState.isSeeking = false;
+    updateMusicProgress();
+  });
+  progressTrack.addEventListener("keydown", (event) => {
+    const duration = elements.bgmAudio.duration;
+    if (!Number.isFinite(duration) || duration <= 0) return;
+
+    const step = event.shiftKey ? 15 : 5;
+    const currentTime = elements.bgmAudio.currentTime || 0;
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      seekMusicTo(currentTime - step);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      seekMusicTo(currentTime + step);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      seekMusicTo(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      seekMusicTo(duration);
+    }
+  });
+  progressTrack.addEventListener("mousedown", (event) => {
+    if (progressTrack.getAttribute("aria-disabled") === "true") return;
+    event.preventDefault();
+    if (!startProgressSeek(event.clientX)) return;
+    seekMusicFromProgressEvent(event);
+
+    const handleMouseMove = (moveEvent) => {
+      seekMusicFromPointer(moveEvent.clientX);
+    };
+    const handleMouseUp = (upEvent) => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      finishProgressSeek(upEvent.clientX);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp, { once: true });
+  });
+  progressTrack.addEventListener(
+    "touchstart",
+    (event) => {
+      if (progressTrack.getAttribute("aria-disabled") === "true") return;
+      const touch = event.touches[0];
+      if (!touch) return;
+      event.preventDefault();
+      if (!startProgressSeek(touch.clientX)) return;
+
+      const handleTouchMove = (moveEvent) => {
+        const movingTouch = moveEvent.touches[0];
+        if (!movingTouch) return;
+        moveEvent.preventDefault();
+        seekMusicFromPointer(movingTouch.clientX);
+      };
+      const handleTouchEnd = (endEvent) => {
+        document.removeEventListener("touchmove", handleTouchMove);
+        const endingTouch = endEvent.changedTouches[0];
+        finishProgressSeek(endingTouch ? endingTouch.clientX : NaN);
+      };
+
+      document.addEventListener("touchmove", handleTouchMove, { passive: false });
+      document.addEventListener("touchend", handleTouchEnd, { once: true });
+      document.addEventListener("touchcancel", handleTouchEnd, { once: true });
+    },
+    { passive: false },
+  );
+
   document.querySelectorAll(".music-option").forEach((option) => {
-    option.addEventListener("click", () => playMusicTrack(option.dataset.musicId));
+    option.addEventListener("click", () => playMusicTrack(option.dataset.musicId, { closeMenu: false }));
   });
 
   updateVolumeDisplay();
+  updateMusicDisplay();
+  updateMusicProgress();
 }
 
-function playMusicTrack(trackId) {
+async function playMusicTrack(trackId, options = {}) {
   const track = appData.musicTracks.find((item) => item.id === trackId);
   const isSameTrack = musicState.currentId === trackId;
+  const shouldCloseMenu = options.closeMenu ?? true;
 
   if (!track) return;
 
   if (isSameTrack && musicState.isPlaying) {
     elements.bgmAudio.pause();
-    setMusicMenuOpen(false);
+    if (shouldCloseMenu) {
+      setMusicMenuOpen(false);
+    }
     return;
   }
 
   if (!isSameTrack) {
-    elements.bgmAudio.src = track.src;
     musicState.currentId = track.id;
+    elements.bgmAudio.removeAttribute("src");
+    delete elements.bgmAudio.dataset.musicId;
+    updateMusicDisplay();
+    updateMusicProgress();
   }
 
-  elements.bgmAudio.loop = true;
+  if (elements.bgmAudio.dataset.musicId !== track.id) {
+    const sourceUrl = await resolveMusicTrackUrl(track);
+
+    if (musicState.currentId !== track.id) return;
+
+    elements.bgmAudio.src = sourceUrl;
+    elements.bgmAudio.dataset.musicId = track.id;
+    elements.bgmAudio.load();
+  }
+
+  elements.bgmAudio.loop = false;
   elements.bgmAudio
     .play()
     .then(() => {
       musicState.isPlaying = true;
       updateMusicDisplay();
-      setMusicMenuOpen(false);
+      updateMusicProgress();
+      if (shouldCloseMenu) {
+        setMusicMenuOpen(false);
+      }
     })
     .catch(() => {
       musicState.isPlaying = false;
@@ -669,10 +1174,38 @@ function playMusicTrack(trackId) {
     });
 }
 
+function toggleCurrentMusicTrack() {
+  if (musicState.isPlaying) {
+    elements.bgmAudio.pause();
+    return;
+  }
+
+  const currentTrack = getCurrentTrack() || appData.musicTracks[0];
+  if (currentTrack) {
+    playMusicTrack(currentTrack.id, { closeMenu: false });
+  }
+}
+
+function playPreviousMusicTrack() {
+  const track = getWrappedTrack(-1);
+  if (track) {
+    playMusicTrack(track.id, { closeMenu: false });
+  }
+}
+
+function playNextMusicTrack() {
+  const track = getWrappedTrack(1);
+  if (track) {
+    playMusicTrack(track.id, { closeMenu: false });
+  }
+}
+
 function initMusicPlayer() {
   if (!elements.musicPlayer) return;
 
+  elements.bgmAudio.preload = "auto";
   elements.bgmAudio.volume = musicState.volume;
+  preloadMusicTrackUrls();
   renderMusicMenu();
   updateMusicDisplay();
 
@@ -683,12 +1216,18 @@ function initMusicPlayer() {
   elements.bgmAudio.addEventListener("play", () => {
     musicState.isPlaying = true;
     updateMusicDisplay();
+    updateMusicProgress();
   });
 
   elements.bgmAudio.addEventListener("pause", () => {
     musicState.isPlaying = false;
     updateMusicDisplay();
   });
+
+  elements.bgmAudio.addEventListener("loadedmetadata", updateMusicProgress);
+  elements.bgmAudio.addEventListener("durationchange", updateMusicProgress);
+  elements.bgmAudio.addEventListener("timeupdate", updateMusicProgress);
+  elements.bgmAudio.addEventListener("ended", playNextMusicTrack);
 
   document.addEventListener("click", (event) => {
     if (!musicState.isMenuOpen || elements.musicPlayer.contains(event.target)) return;
@@ -726,12 +1265,12 @@ function renderTrips() {
 
   elements.tripGrid.innerHTML = `
     ${tripCards}
-    <article class="trip-card trip-card-loading" aria-label="麦麦和兔兔的故事将会持续loading">
+    <article class="trip-card trip-card-loading" aria-label="麦麦和兔兔的故事将会持续展开">
       <span class="trip-photo trip-photo-loading" aria-hidden="true">
         <span>Loading...</span>
       </span>
       <span class="trip-title-group trip-loading-copy">
-        <h3>麦麦和兔兔的故事将会持续loading...</h3>
+        <h3>麦麦和兔兔的故事将会持续展开...</h3>
       </span>
     </article>
   `;
