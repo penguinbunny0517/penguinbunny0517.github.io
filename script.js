@@ -237,10 +237,10 @@ const appData = {
     },
   ],
   longingMessages: [
-    "麦麦小鹅刚刚向兔兔公主发送了一颗小心心。",
-    "兔兔公主收到一份来自地图另一端的抱抱。",
+    "发送一颗小心心～",
+    "收到一份抱抱！",
     "今天的想念已经盖章，正在慢慢飞过去。",
-    "两只小动物又在同一张地图上靠近了一点点。",
+    "咪咪咪！",
   ],
   timeline: [
     {
@@ -2537,9 +2537,9 @@ function renderMessageBoards() {
           ? `<span><b>同步中</b></span>
                 <small>正在读取留言</small>`
           : canViewMessages
-          ? `<span><b>${messages.length}</b> 条留言</span>
+            ? `<span><b>${messages.length}</b> 条留言</span>
                 <small>${getLatestMessageText(messages)}</small>`
-          : `<span><b>${isConfigured ? "Private" : "Pending"}</b></span>
+            : `<span><b>${isConfigured ? "Private" : "Pending"}</b></span>
                 <small>${isConfigured ? "登录后查看留言" : "等待设置邮箱"}</small>`}
           </span>
         </button>
