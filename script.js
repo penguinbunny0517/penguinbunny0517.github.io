@@ -98,7 +98,7 @@ const appData = {
     {
       id: "dalian",
       place: "大连",
-      shortName: "中国 · 大连",
+      shortName: "中国 · 辽宁 · 大连",
       englishTitle: "Dalian",
       date: "2025.10.04 - 2025.10.08",
       season: "海风和黄昏",
@@ -126,7 +126,25 @@ const appData = {
       date: "2025.11.16",
       season: "动物和晴天",
       icon: "园",
-      photos: ["assets/trips/beijing-zoo/beiye1.jpg"],
+      photos: [
+        "assets/trips/beijing-zoo/beiye1.jpg",
+        "assets/trips/beijing-zoo/beiye2.jpg",
+        "assets/trips/beijing-zoo/beiye3.jpg",
+        "assets/trips/beijing-zoo/beiye4.jpg",
+        "assets/trips/beijing-zoo/beiye5.jpg",
+        "assets/trips/beijing-zoo/beiye6.jpg",
+        "assets/trips/beijing-zoo/beiye7.jpg",
+        "assets/trips/beijing-zoo/beiye8.jpg",
+        "assets/trips/beijing-zoo/beiye9.jpg",
+        "assets/trips/beijing-zoo/beiye10.jpg",
+        "assets/trips/beijing-zoo/beiye11.jpg",
+        "assets/trips/beijing-zoo/beiye12.jpg",
+        "assets/trips/beijing-zoo/beiye13.jpg",
+        "assets/trips/beijing-zoo/beiye14.jpg",
+        "assets/trips/beijing-zoo/beiye15.jpg",
+        "assets/trips/beijing-zoo/beiye16.jpg",
+        "assets/trips/beijing-zoo/beiye17.jpg",
+      ],
       quote: "“都可以随便的，你说的，我都愿意去，小火车摆动的旋律。”",
     },
     {
@@ -137,7 +155,19 @@ const appData = {
       date: "2025.12.13 - 2025.12.14",
       season: "城市和烟火",
       icon: "津",
-      photos: ["assets/trips/tianjin/tianjin1.jpg"],
+      photos: [
+        "assets/trips/tianjin/tianjin1.jpg",
+        "assets/trips/tianjin/tianjin2.jpg",
+        "assets/trips/tianjin/tianjin3.jpg",
+        "assets/trips/tianjin/tianjin4.jpg",
+        "assets/trips/tianjin/tianjin5.jpg",
+        "assets/trips/tianjin/tianjin6.jpg",
+        "assets/trips/tianjin/tianjin7.jpg",
+        "assets/trips/tianjin/tianjin8.jpg",
+        "assets/trips/tianjin/tianjin9.jpg",
+        "assets/trips/tianjin/tianjin10.jpg",
+        "assets/trips/tianjin/tianjin11.jpg",
+      ],
       quote: "“パッと光って咲いた、花火を見ていた。”",
     },
     {
@@ -148,7 +178,16 @@ const appData = {
       date: "2026.02.28",
       season: "魔法和拥抱",
       icon: "影",
-      photos: ["assets/trips/universal/huanqiu1.jpg"],
+      photos: [
+        "assets/trips/universal/huanqiu1.jpg",
+        "assets/trips/universal/huanqiu2.jpg",
+        "assets/trips/universal/huanqiu3.jpg",
+        "assets/trips/universal/huanqiu4.jpg",
+        "assets/trips/universal/huanqiu5.jpg",
+        "assets/trips/universal/huanqiu6.jpg",
+        "assets/trips/universal/huanqiu7.jpg",
+        "assets/trips/universal/huanqiu8.jpg",
+      ],
       quote: "“要说说笑笑，随风飘飘，永不坠落。”",
     },
     {
@@ -159,7 +198,41 @@ const appData = {
       date: "2026.03.25 - 2026.03.29",
       season: "橘子和海岸线",
       icon: "橘",
-      photos: ["assets/trips/jeju/jeju1.jpg"],
+      photos: [
+        "assets/trips/jeju/jeju1.jpg",
+        "assets/trips/jeju/jeju2.jpg",
+        "assets/trips/jeju/jeju3.jpg",
+        "assets/trips/jeju/jeju4.jpg",
+        "assets/trips/jeju/jeju5.jpg",
+        "assets/trips/jeju/jeju6.jpg",
+        "assets/trips/jeju/jeju7.jpg",
+        "assets/trips/jeju/jeju8.jpg",
+        "assets/trips/jeju/jeju9.jpg",
+        "assets/trips/jeju/jeju10.jpg",
+        "assets/trips/jeju/jeju11.jpg",
+        "assets/trips/jeju/jeju12.jpg",
+        "assets/trips/jeju/jeju13.jpg",
+        "assets/trips/jeju/jeju14.jpg",
+        "assets/trips/jeju/jeju15.jpg",
+        "assets/trips/jeju/jeju16.jpg",
+        "assets/trips/jeju/jeju17.jpg",
+        "assets/trips/jeju/jeju18.jpg",
+        "assets/trips/jeju/jeju19.jpg",
+        "assets/trips/jeju/jeju20.jpg",
+        "assets/trips/jeju/jeju21.jpg",
+        "assets/trips/jeju/jeju22.jpg",
+        "assets/trips/jeju/jeju23.jpg",
+        "assets/trips/jeju/jeju24.jpg",
+        "assets/trips/jeju/jeju25.jpg",
+        "assets/trips/jeju/jeju26.jpg",
+        "assets/trips/jeju/jeju27.jpg",
+        "assets/trips/jeju/jeju28.jpg",
+        "assets/trips/jeju/jeju29.jpg",
+        "assets/trips/jeju/jeju30.jpg",
+        "assets/trips/jeju/jeju31.jpg",
+        "assets/trips/jeju/jeju32.jpg",
+        "assets/trips/jeju/jeju33.jpg",
+      ],
       quote: "“你记得我最纯净的轮廓，握住小小风车和放肆的梦。”"
     },
   ],
@@ -177,12 +250,12 @@ const appData = {
     },
     {
       date: "2025.05.11",
-      tag: "鹅兔初见：第一天 & 暖暖～",
+      tag: "鹅兔初见！第一天 & 暖暖～",
       text: "“爱是腾空的魔幻，第一天的纯真色彩它总是永远那么灿烂。”",
     },
     {
       date: "2025.05.17",
-      tag: "在一起啦！❤️",
+      tag: "在一起啦！",
       text: "“我想写一首诗，犹如日，犹如月，犹如午阴，犹如无边落木萧萧下——我的诗情没有两片叶子。”",
     },
     {
@@ -266,6 +339,41 @@ const appData = {
       text: "第一次有了和兔兔一起生活的感觉，日常中透着幸福～",
     },
   ],
+  milestones: [
+    {
+      id: "first-meet",
+      title: "初见纪念日",
+      date: "2025-05-11",
+      repeat: "yearly",
+      note: "",
+      accent: "blue",
+    },
+    {
+      id: "together",
+      title: "在一起纪念日",
+      date: "2025-05-17",
+      repeat: "yearly",
+      note: "",
+      accent: "coral",
+    },
+    {
+      id: "maimai-birthday",
+      title: "麦麦の生日",
+      date: "2004-03-26",
+      repeat: "yearly",
+      note: "",
+      accent: "mint",
+    },
+    {
+      id: "tutu-birthday",
+      title: "兔兔の生日",
+      date: "2005-04-02",
+      repeat: "yearly",
+      note: "",
+      accent: "butter",
+    },
+  ],
+  wishes: [],
 };
 
 const mapState = {
@@ -286,18 +394,47 @@ const musicState = {
 
 const GEOCODE_CACHE_KEY = "penguinBunnyReverseGeocodeV2";
 const MESSAGE_STORAGE_KEY = "penguinBunnyMessagesLocalV2";
+const WISH_STORAGE_KEY = "penguinBunnyWishesLocalV2";
+const LEGACY_WISH_STORAGE_KEYS = ["penguinBunnyWishesLocalV1"];
+const REMOVED_DEFAULT_WISH_IDS = new Set([
+  "wish-happy-valley-again",
+  "wish-sea-sunrise",
+  "wish-cook-dinner",
+]);
+const REMOTE_TABLES = {
+  messages: "love_messages",
+  wishes: "love_wishes",
+};
+const MESSAGE_IMAGE_BUCKET = "penguinbunny-message-images";
 const MAX_MESSAGE_IMAGES = 6;
 
 const messageState = {
   activeBoardId: null,
   editingMessageId: null,
   draftImages: [],
+  messages: [],
+  syncStatus: "local",
+  syncError: "",
+};
+
+const messageImageState = {
+  messageId: null,
+  images: [],
+  activeIndex: 0,
+};
+
+const wishState = {
+  wishes: appData.wishes.map((wish) => ({ ...wish })),
+  syncStatus: "local",
+  syncError: "",
 };
 
 const authState = {
   client: null,
   session: null,
   pendingBoardId: null,
+  pendingTripId: null,
+  pendingAuthContext: "site",
   isReady: false,
 };
 
@@ -315,9 +452,16 @@ const elements = {
   musicMenu: document.querySelector("#musicMenu"),
   musicLabel: document.querySelector("#musicLabel"),
   bgmAudio: document.querySelector("#bgmAudio"),
+  siteLoginButton: document.querySelector("#siteLoginButton"),
   tripGrid: document.querySelector("#tripGrid"),
   timelineViewport: document.querySelector("#timelineViewport"),
   timelineTrack: document.querySelector("#timelineTrack"),
+  milestoneNoteBoard: document.querySelector("#milestoneNoteBoard"),
+  wishStats: document.querySelector("#wishStats"),
+  wishAuthHint: document.querySelector("#wishAuthHint"),
+  wishForm: document.querySelector("#wishForm"),
+  wishInput: document.querySelector("#wishInput"),
+  wishList: document.querySelector("#wishList"),
   messageBoardGrid: document.querySelector("#messageBoardGrid"),
   messageModal: document.querySelector("#messageModal"),
   messageModalTitle: document.querySelector("#messageModalTitle"),
@@ -334,12 +478,20 @@ const elements = {
   messageFeedTitle: document.querySelector("#messageFeedTitle"),
   messageFeedCount: document.querySelector("#messageFeedCount"),
   messageList: document.querySelector("#messageList"),
+  messageImageModal: document.querySelector("#messageImageModal"),
+  messageImageFull: document.querySelector("#messageImageFull"),
+  messageImagePrev: document.querySelector("#messageImagePrev"),
+  messageImageNext: document.querySelector("#messageImageNext"),
+  messageImageCounter: document.querySelector("#messageImageCounter"),
   authModal: document.querySelector("#authModal"),
+  authTitle: document.querySelector("#authTitle"),
+  authCopy: document.querySelector("#authCopy"),
   authForm: document.querySelector("#authForm"),
   authEmail: document.querySelector("#authEmail"),
   authPassword: document.querySelector("#authPassword"),
   authSubmit: document.querySelector("#authSubmit"),
   authStatus: document.querySelector("#authStatus"),
+  authSignOut: document.querySelector("#authSignOut"),
   tripModal: document.querySelector("#tripModal"),
   modalImage: document.querySelector("#modalImage"),
   modalPrev: document.querySelector("#modalPrev"),
@@ -348,6 +500,9 @@ const elements = {
   modalTitle: document.querySelector("#modalTitle"),
   modalEnglish: document.querySelector("#modalEnglish"),
   modalQuote: document.querySelector("#modalQuote"),
+  tripAuthRow: document.querySelector("#tripAuthRow"),
+  tripAuthStatus: document.querySelector("#tripAuthStatus"),
+  tripSignOut: document.querySelector("#tripSignOut"),
   missButton: document.querySelector("#missButton"),
   missMessage: document.querySelector("#missMessage"),
   nextMeetText: document.querySelector("#nextMeetText"),
@@ -1276,7 +1431,11 @@ function renderTrips() {
   `;
 
   document.querySelectorAll(".trip-card[data-trip-id]").forEach((card) => {
-    card.addEventListener("click", () => openTripModal(card.dataset.tripId));
+    card.addEventListener("click", () => {
+      const tripId = card.dataset.tripId;
+      if (!ensureSiteAuth({ context: "trip", tripId })) return;
+      openTripModal(tripId);
+    });
   });
 }
 
@@ -1327,6 +1486,409 @@ function renderTimeline() {
   window.requestAnimationFrame(updateTimelineFade);
 }
 
+function getTodayStart() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+function parseDateParts(dateText) {
+  if (!dateText) return null;
+
+  const [year, month, day] = dateText.split("-").map(Number);
+  if (!year || !month || !day) return null;
+
+  return { year, month, day };
+}
+
+function getNextMilestoneDate(milestone) {
+  const parts = parseDateParts(milestone.date);
+  if (!parts) return null;
+
+  if (milestone.repeat !== "yearly") {
+    return new Date(parts.year, parts.month - 1, parts.day);
+  }
+
+  const today = getTodayStart();
+  const nextDate = new Date(today.getFullYear(), parts.month - 1, parts.day);
+
+  if (nextDate < today) {
+    nextDate.setFullYear(today.getFullYear() + 1);
+  }
+
+  return nextDate;
+}
+
+function formatMilestoneDate(milestone) {
+  const parts = parseDateParts(milestone.date);
+
+  if (!parts) return "待设定";
+
+  return `${String(parts.month).padStart(2, "0")}.${String(parts.day).padStart(2, "0")}`;
+}
+
+function getMilestoneStatus(milestone) {
+  const nextDate = getNextMilestoneDate(milestone);
+  if (!nextDate) return "等补充";
+
+  const days = Math.round((nextDate - getTodayStart()) / 86400000);
+  if (days === 0) return "就是今天";
+  if (days > 0) return `还有 ${days} 天`;
+
+  return "已经收藏";
+}
+
+function renderMilestones() {
+  if (!elements.milestoneNoteBoard) return;
+
+  const tilts = ["-1.6deg", "1.1deg", "-0.7deg", "1.7deg", "-1.2deg"];
+
+  elements.milestoneNoteBoard.innerHTML = appData.milestones
+    .map((milestone, index) => {
+      const date = formatMilestoneDate(milestone);
+      const status = getMilestoneStatus(milestone);
+      const todayClass = status === "就是今天" ? " is-today" : "";
+      const tilt = tilts[index % tilts.length];
+
+      return `
+        <article class="milestone-note milestone-note-${milestone.accent}${todayClass}" style="--note-tilt: ${tilt}">
+          <span class="milestone-tape" aria-hidden="true"></span>
+          <span class="milestone-date">
+            <strong>${date}</strong>
+          </span>
+          <h3>${milestone.title}</h3>
+          <span class="milestone-status">${status}</span>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function getInitialWishes() {
+  return appData.wishes.map((wish) => ({ ...wish }));
+}
+
+function clearLegacyWishStorage() {
+  try {
+    LEGACY_WISH_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+  } catch {
+    // Ignore storage failures so the public page can still render.
+  }
+}
+
+function removeDefaultWishes(wishes) {
+  return wishes.filter((wish) => !REMOVED_DEFAULT_WISH_IDS.has(wish.id));
+}
+
+function getLocalWishes() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(WISH_STORAGE_KEY));
+    return Array.isArray(stored) ? removeDefaultWishes(stored) : getInitialWishes();
+  } catch {
+    return getInitialWishes();
+  }
+}
+
+function getStoredWishes() {
+  if (wishState.syncStatus === "ready" || wishState.syncStatus === "loading") {
+    return wishState.wishes;
+  }
+
+  return getLocalWishes();
+}
+
+function saveLocalWishes(wishes) {
+  try {
+    localStorage.setItem(WISH_STORAGE_KEY, JSON.stringify(removeDefaultWishes(wishes)));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function normalizeRemoteWish(row) {
+  return {
+    id: row.id,
+    text: row.text || "",
+    createdAt: row.created_at,
+    completedAt: row.completed_at,
+    createdBy: row.created_by,
+    completedBy: row.completed_by,
+  };
+}
+
+function getSyncErrorCopy(error) {
+  const message = String(error?.message || "");
+
+  if (message.includes("love_messages") || message.includes("love_wishes") || message.includes("schema cache")) {
+    return "Supabase 同步表还没建好，当前先显示本地预览。";
+  }
+
+  if (message.includes("bucket") || message.includes(MESSAGE_IMAGE_BUCKET)) {
+    return "Supabase 图片空间还没建好，图片暂时不能同步。";
+  }
+
+  return "同步暂时没有成功，当前先显示本地预览。";
+}
+
+async function refreshRemoteWishes() {
+  if (!authState.client) {
+    wishState.syncStatus = "local";
+    wishState.syncError = "";
+    wishState.wishes = getLocalWishes();
+    renderWishes();
+    return;
+  }
+
+  wishState.syncStatus = "loading";
+  wishState.syncError = "";
+  renderWishes();
+
+  const { data, error } = await authState.client
+    .from(REMOTE_TABLES.wishes)
+    .select("id,text,created_by,completed_by,created_at,completed_at,updated_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    wishState.syncStatus = "error";
+    wishState.syncError = getSyncErrorCopy(error);
+    wishState.wishes = getLocalWishes();
+    renderWishes();
+    return;
+  }
+
+  wishState.syncStatus = "ready";
+  wishState.syncError = "";
+  wishState.wishes = Array.isArray(data) ? removeDefaultWishes(data.map(normalizeRemoteWish)) : [];
+  saveLocalWishes(wishState.wishes);
+  renderWishes();
+}
+
+function getWishStatusText(wish) {
+  if (!wish.completedAt) return "";
+  return `${formatMessageDate(wish.completedAt)} 已打卡`;
+}
+
+function renderWishes() {
+  if (!elements.wishList || !elements.wishStats || !elements.wishAuthHint || !elements.wishForm) return;
+
+  const wishes = getStoredWishes();
+  const completedCount = wishes.filter((wish) => wish.completedAt).length;
+  const pendingCount = wishes.length - completedCount;
+  const canUseWishes = isSiteAuthenticated();
+  const isSyncing = wishState.syncStatus === "loading";
+  const isSynced = wishState.syncStatus === "ready";
+
+  elements.wishStats.innerHTML = `
+    <span><b>${pendingCount}</b> 个想一起做</span>
+    <span><b>${completedCount}</b> 个已打卡</span>
+  `;
+
+  if (wishState.syncStatus === "error") {
+    elements.wishAuthHint.innerHTML = `<span>${escapeHTML(wishState.syncError)}</span>`;
+  } else if (isSyncing) {
+    elements.wishAuthHint.innerHTML = "<span>正在同步小愿望...</span>";
+  } else if (canUseWishes) {
+    elements.wishAuthHint.innerHTML = `<span>已登录：${escapeHTML(getCurrentAuthName())}，${isSynced ? "已开启跨设备同步" : "可以新增和打卡"}。</span>`;
+  } else {
+    elements.wishAuthHint.innerHTML = `<span>登录后可以新增愿望和打卡。</span><button type="button" data-wish-login>登录</button>`;
+  }
+
+  elements.wishForm.hidden = !canUseWishes;
+
+  elements.wishList.innerHTML = wishes
+    .map((wish, index) => {
+      const isDone = Boolean(wish.completedAt);
+      const tilt = ["-0.7deg", "0.55deg", "-0.35deg", "0.8deg"][index % 4];
+
+      return `
+        <article class="wish-card ${isDone ? "is-done" : ""}" style="--wish-tilt: ${tilt}">
+          <span class="wish-pin" aria-hidden="true"></span>
+          <span class="wish-index">${String(index + 1).padStart(2, "0")}</span>
+          <h3>${escapeHTML(wish.text)}</h3>
+          ${wish.completedAt ? `<span class="wish-status">${getWishStatusText(wish)}</span>` : ""}
+          <div class="wish-actions">
+            <button class="wish-toggle" type="button" data-toggle-wish="${escapeHTML(wish.id)}" ${!canUseWishes || isSyncing ? "disabled" : ""}>
+              ${isDone ? "取消打卡" : "打卡完成"}
+            </button>
+            <button class="wish-delete" type="button" data-delete-wish="${escapeHTML(wish.id)}" ${!canUseWishes || isSyncing ? "disabled" : ""}>
+              删除
+            </button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+async function addWish(text) {
+  const normalizedText = String(text || "").trim();
+  if (!normalizedText) return;
+
+  const currentAuthor = getCurrentAuthor();
+  if (!currentAuthor) return;
+
+  if (authState.client && wishState.syncStatus !== "error") {
+    elements.wishForm.querySelector("button").disabled = true;
+
+    const { data, error } = await authState.client
+      .from(REMOTE_TABLES.wishes)
+      .insert({
+        text: normalizedText,
+        created_by: currentAuthor.id,
+      })
+      .select("id,text,created_by,completed_by,created_at,completed_at,updated_at");
+
+    elements.wishForm.querySelector("button").disabled = false;
+
+    if (error) {
+      wishState.syncStatus = "error";
+      wishState.syncError = getSyncErrorCopy(error);
+      renderWishes();
+      return;
+    }
+
+    elements.wishInput.value = "";
+    if (Array.isArray(data) && data[0]) {
+      wishState.wishes.unshift(normalizeRemoteWish(data[0]));
+      renderWishes();
+    }
+    refreshRemoteWishes();
+    return;
+  }
+
+  const wishes = getLocalWishes();
+  wishes.unshift({
+    id: crypto.randomUUID ? crypto.randomUUID() : `wish-${Date.now()}`,
+    text: normalizedText,
+    createdAt: new Date().toISOString(),
+    createdBy: currentAuthor.id,
+    completedAt: null,
+  });
+
+  if (saveLocalWishes(wishes)) {
+    elements.wishInput.value = "";
+    wishState.wishes = wishes;
+    renderWishes();
+  }
+}
+
+async function toggleWishCompletion(wishId) {
+  const wishes = getStoredWishes();
+  const targetWish = wishes.find((wish) => wish.id === wishId);
+  if (!targetWish) return;
+
+  const currentAuthor = getCurrentAuthor();
+  if (!currentAuthor) return;
+
+  const previousCompletedAt = targetWish.completedAt;
+  const previousCompletedBy = targetWish.completedBy;
+  const nextCompletedAt = targetWish.completedAt ? null : new Date().toISOString();
+  const nextCompletedBy = targetWish.completedAt ? null : currentAuthor.id;
+
+  if (authState.client && wishState.syncStatus !== "error") {
+    targetWish.completedAt = nextCompletedAt;
+    targetWish.completedBy = nextCompletedBy;
+    renderWishes();
+
+    const { error } = await authState.client
+      .from(REMOTE_TABLES.wishes)
+      .update({
+        completed_at: nextCompletedAt,
+        completed_by: nextCompletedBy,
+      })
+      .eq("id", wishId);
+
+    if (error) {
+      targetWish.completedAt = previousCompletedAt;
+      targetWish.completedBy = previousCompletedBy;
+      wishState.syncStatus = "error";
+      wishState.syncError = getSyncErrorCopy(error);
+      renderWishes();
+      return;
+    }
+
+    refreshRemoteWishes();
+    return;
+  }
+
+  targetWish.completedAt = nextCompletedAt;
+  targetWish.completedBy = nextCompletedBy;
+
+  if (saveLocalWishes(wishes)) {
+    wishState.wishes = wishes;
+    renderWishes();
+  }
+}
+
+async function deleteWish(wishId) {
+  const wishes = getStoredWishes();
+  const targetWish = wishes.find((wish) => wish.id === wishId);
+  if (!targetWish) return;
+
+  const shouldDelete = window.confirm(`确定要删除「${targetWish.text}」这个小愿望吗？`);
+  if (!shouldDelete) return;
+
+  const nextWishes = wishes.filter((wish) => wish.id !== wishId);
+
+  if (authState.client && wishState.syncStatus !== "error") {
+    const previousWishes = wishState.wishes.map((wish) => ({ ...wish }));
+    wishState.wishes = nextWishes;
+    renderWishes();
+
+    const { error } = await authState.client
+      .from(REMOTE_TABLES.wishes)
+      .delete()
+      .eq("id", wishId);
+
+    if (error) {
+      wishState.wishes = previousWishes;
+      wishState.syncStatus = "error";
+      wishState.syncError = getSyncErrorCopy(error);
+      renderWishes();
+      return;
+    }
+
+    saveLocalWishes(nextWishes);
+    refreshRemoteWishes();
+    return;
+  }
+
+  if (saveLocalWishes(nextWishes)) {
+    wishState.wishes = nextWishes;
+    renderWishes();
+  }
+}
+
+function bindWishes() {
+  if (!elements.wishList || !elements.wishForm || !elements.wishAuthHint) return;
+
+  elements.wishForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!ensureSiteAuth({ context: "site" })) return;
+    addWish(elements.wishInput.value);
+  });
+
+  elements.wishList.addEventListener("click", (event) => {
+    const toggleButton = event.target.closest("[data-toggle-wish]");
+    const deleteButton = event.target.closest("[data-delete-wish]");
+    if (!toggleButton && !deleteButton) return;
+    if (!ensureSiteAuth({ context: "site" })) return;
+
+    if (toggleButton) {
+      toggleWishCompletion(toggleButton.dataset.toggleWish);
+      return;
+    }
+
+    deleteWish(deleteButton.dataset.deleteWish);
+  });
+
+  elements.wishAuthHint.addEventListener("click", (event) => {
+    if (event.target.closest("[data-wish-login]")) {
+      openAuthModal(null, { context: "site" });
+    }
+  });
+}
+
 function updateTimelineFade() {
   const maxScroll = elements.timelineTrack.scrollWidth - elements.timelineTrack.clientWidth;
   const atStart = elements.timelineTrack.scrollLeft <= 2;
@@ -1349,6 +1911,10 @@ function getBoardAllowedEmails(boardId) {
   return (board?.allowedEmails || []).map(normalizeEmail);
 }
 
+function getSiteAllowedEmails() {
+  return appData.messageAuthors.map((author) => normalizeEmail(author.email));
+}
+
 function getCurrentAuthEmail() {
   return normalizeEmail(authState.session?.user?.email);
 }
@@ -1361,6 +1927,10 @@ function getAuthorByEmail(email) {
 
 function getCurrentAuthor() {
   return getAuthorByEmail(getCurrentAuthEmail());
+}
+
+function getCurrentAuthName() {
+  return getCurrentAuthor()?.name || "专属账号";
 }
 
 function getBoardOwnerAuthor(boardId) {
@@ -1388,6 +1958,10 @@ function isMessageAuthenticated(boardId = messageState.activeBoardId || authStat
   return Boolean(authState.session && isAllowedMessageEmail(getCurrentAuthEmail(), boardId));
 }
 
+function isSiteAuthenticated() {
+  return Boolean(authState.session && getSiteAllowedEmails().includes(getCurrentAuthEmail()));
+}
+
 function isBoardAuthConfigured(boardId) {
   return getBoardAllowedEmails(boardId).length > 0;
 }
@@ -1413,6 +1987,19 @@ function setAuthSubmitLoading(isLoading) {
   elements.authSubmit.textContent = isLoading ? "登录中..." : "登录";
 }
 
+function setAuthSignOutVisible(isVisible) {
+  if (!elements.authSignOut) return;
+  elements.authSignOut.hidden = !isVisible;
+}
+
+function updateSiteLoginButton() {
+  if (!elements.siteLoginButton) return;
+
+  const authenticated = isSiteAuthenticated();
+  elements.siteLoginButton.textContent = authenticated ? "已登录" : "登录";
+  elements.siteLoginButton.classList.toggle("is-authenticated", authenticated);
+}
+
 function createSupabaseClient() {
   if (!window.supabase?.createClient) return null;
 
@@ -1428,6 +2015,29 @@ function createSupabaseClient() {
 function updateAuthDependentUI() {
   renderMessageBoards();
   updateMessageAuthStatus();
+  updateTripAuthStatus();
+  updateSiteLoginButton();
+  renderWishes();
+}
+
+function completePendingAuthAction() {
+  if (authState.pendingTripId && isSiteAuthenticated()) {
+    const tripId = authState.pendingTripId;
+    authState.pendingTripId = null;
+    closeAuthModal();
+    openTripModal(tripId);
+    return true;
+  }
+
+  if (authState.pendingBoardId && isMessageAuthenticated(authState.pendingBoardId)) {
+    const boardId = authState.pendingBoardId;
+    authState.pendingBoardId = null;
+    closeAuthModal();
+    openMessageModal(boardId);
+    return true;
+  }
+
+  return false;
 }
 
 async function initSupabaseAuth() {
@@ -1451,43 +2061,66 @@ async function initSupabaseAuth() {
   authState.client.auth.onAuthStateChange((_event, session) => {
     authState.session = session;
     updateAuthDependentUI();
-
-    if (authState.pendingBoardId && isMessageAuthenticated(authState.pendingBoardId)) {
-      const boardId = authState.pendingBoardId;
-      authState.pendingBoardId = null;
-      closeAuthModal();
-      openMessageModal(boardId);
-    }
+    refreshRemoteData().then(() => {
+      completePendingAuthAction();
+    });
   });
 
   updateAuthDependentUI();
+  refreshRemoteData();
 }
 
-function openAuthModal(boardId) {
-  const board = getBoard(boardId);
-  const allowedEmails = getBoardAllowedEmails(boardId);
+function openAuthModal(boardId = null, options = {}) {
+  const board = boardId ? getBoard(boardId) : null;
+  const context = options.context || (boardId ? "message" : "site");
+  const allowedEmails = boardId ? getBoardAllowedEmails(boardId) : getSiteAllowedEmails();
+  const alreadyAllowed = boardId ? isMessageAuthenticated(boardId) : isSiteAuthenticated();
+  const hideAuthForm = allowedEmails.length === 0 || (context === "site" && alreadyAllowed);
 
-  authState.pendingBoardId = boardId;
+  authState.pendingBoardId = boardId || null;
+  authState.pendingTripId = options.tripId || null;
+  authState.pendingAuthContext = context;
   elements.authEmail.value = "";
   elements.authPassword.value = "";
-  elements.authForm.hidden = allowedEmails.length === 0;
+  elements.authForm.hidden = hideAuthForm;
   elements.authSubmit.textContent = "登录";
+  setAuthSignOutVisible(context === "site" && alreadyAllowed);
 
-  if (!board) {
+  if (context === "trip") {
+    elements.authTitle.textContent = "鹅兔相册入口";
+    elements.authCopy.textContent = "旅行相册只给麦麦和兔兔查看。";
+  } else if (context === "site") {
+    elements.authTitle.textContent = "鹅兔专属入口";
+    elements.authCopy.textContent = "登录后可以查看旅行相册、专属留言板和小小愿望清单。";
+  } else {
+    elements.authTitle.textContent = "鹅兔留言入口";
+    elements.authCopy.textContent = "留言板只给麦麦和兔兔使用！";
+  }
+
+  if (boardId && !board) {
     setAuthStatus("这个留言板暂时没有找到。", "error");
   } else if (allowedEmails.length === 0) {
-    setAuthStatus("这个留言板还没有开放登录。", "error");
-  } else if (authState.session && !isMessageAuthenticated(boardId)) {
-    setAuthStatus("当前账号不能进入这个留言板，请换另一个专属账号。", "error");
+    setAuthStatus("这里还没有开放登录。", "error");
+  } else if (authState.session && !alreadyAllowed) {
+    setAuthStatus("当前账号不能进入这里，请换另一个专属账号。", "error");
   } else if (!authState.client) {
     setAuthStatus("认证服务还没准备好，检查网络后刷新页面。", "error");
+  } else if (context === "trip") {
+    setAuthStatus("登录后就可以打开旅行相册。", "neutral");
+  } else if (context === "site") {
+    setAuthStatus(
+      authState.session
+        ? `已登录：${getCurrentAuthName()}，旅行相册、留言板和愿望清单权限已打开。`
+        : "只给麦麦和兔兔使用。",
+      authState.session ? "success" : "neutral"
+    );
   } else {
     setAuthStatus(getBoardPermissionText(board), "neutral");
   }
 
   elements.authModal.hidden = false;
   document.body.classList.add("modal-open");
-  if (allowedEmails.length === 0) {
+  if (hideAuthForm) {
     elements.authSubmit.disabled = true;
   } else {
     elements.authSubmit.disabled = false;
@@ -1498,6 +2131,9 @@ function openAuthModal(boardId) {
 function closeAuthModal() {
   elements.authModal.hidden = true;
   authState.pendingBoardId = null;
+  authState.pendingTripId = null;
+  authState.pendingAuthContext = "site";
+  setAuthSignOutVisible(false);
   document.body.classList.remove("modal-open");
 }
 
@@ -1508,19 +2144,37 @@ function ensureMessageAuth(boardId) {
   return false;
 }
 
+function ensureSiteAuth(options = {}) {
+  if (isSiteAuthenticated()) return true;
+
+  openAuthModal(null, options);
+  return false;
+}
+
+function bindSiteLoginButton() {
+  if (!elements.siteLoginButton) return;
+
+  elements.siteLoginButton.addEventListener("click", () => {
+    openAuthModal(null, { context: "site" });
+  });
+}
+
 async function submitPasswordAuth() {
   const email = normalizeEmail(elements.authEmail.value);
   const password = elements.authPassword.value;
   const boardId = authState.pendingBoardId;
+  const tripId = authState.pendingTripId;
+  const context = authState.pendingAuthContext;
   const board = getBoard(boardId);
+  const allowedEmails = boardId ? getBoardAllowedEmails(boardId) : getSiteAllowedEmails();
 
-  if (!board || !isBoardAuthConfigured(board.id)) {
+  if (boardId && (!board || !isBoardAuthConfigured(board.id))) {
     setAuthStatus("这个留言板还没有开放登录。", "error");
     return;
   }
 
-  if (!isAllowedMessageEmail(email, board.id)) {
-    setAuthStatus("这个账号不能进入当前留言板。", "error");
+  if (!allowedEmails.includes(email)) {
+    setAuthStatus("这个账号不能进入这里。", "error");
     return;
   }
 
@@ -1550,18 +2204,59 @@ async function submitPasswordAuth() {
   }
 
   authState.session = data.session;
+  await refreshRemoteData();
   updateAuthDependentUI();
+  const shouldOpenBoard = Boolean(board && authState.pendingBoardId === board.id);
+  const shouldOpenTrip = Boolean(context === "trip" && tripId && authState.pendingTripId === tripId);
+
+  if (context === "site" && !shouldOpenBoard && !shouldOpenTrip) {
+    authState.pendingBoardId = null;
+    authState.pendingTripId = null;
+    elements.authForm.hidden = true;
+    setAuthSignOutVisible(true);
+    setAuthStatus(`已登录：${getCurrentAuthName()}，旅行相册、留言板和愿望清单权限已打开。`, "success");
+    return;
+  }
+
   closeAuthModal();
-  openMessageModal(board.id);
+
+  if (shouldOpenBoard) {
+    openMessageModal(board.id);
+    return;
+  }
+
+  if (shouldOpenTrip) {
+    openTripModal(tripId);
+  }
 }
 
-async function signOutMessageAuth() {
+async function signOutAuth(source = "site") {
   if (!authState.client) return;
 
   await authState.client.auth.signOut({ scope: "local" });
   authState.session = null;
-  closeMessageModal();
+  messageState.messages = [];
+  messageState.syncStatus = "local";
+  messageState.syncError = "";
+
+  if (source === "message") {
+    closeMessageModal();
+  }
+
+  if (source === "trip") {
+    closeTripModal();
+  }
+
   updateAuthDependentUI();
+  refreshRemoteWishes();
+
+  if (source === "auth") {
+    openAuthModal(null, { context: "site" });
+  }
+}
+
+async function signOutMessageAuth() {
+  await signOutAuth("message");
 }
 
 function updateMessageAuthStatus() {
@@ -1577,13 +2272,27 @@ function updateMessageAuthStatus() {
     return;
   }
 
+  if (messageState.syncStatus === "loading") {
+    elements.messageAuthStatus.innerHTML = "<span>正在同步留言...</span>";
+    return;
+  }
+
+  if (messageState.syncStatus === "error") {
+    elements.messageAuthStatus.innerHTML = `
+      <span>${escapeHTML(messageState.syncError)}</span>
+      <button type="button" data-message-sign-out>退出登录</button>
+    `;
+    return;
+  }
+
   const email = getCurrentAuthEmail();
   const boardId = messageState.activeBoardId;
   const author = getCurrentAuthor();
   const isOwner = canEditBoard(boardId);
   const board = getBoard(boardId);
+  const syncCopy = messageState.syncStatus === "ready" ? "，已跨设备同步" : "";
   const statusText = isAllowedMessageEmail(email, boardId)
-    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言和编辑" : `可查看${board ? board.title : "留言板"}`}`
+    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言和编辑" : `可查看${board ? board.title : "留言板"}`}${syncCopy}`
     : "当前账号不在允许名单。";
 
   elements.messageAuthStatus.innerHTML = `
@@ -1599,6 +2308,8 @@ function bindAuthModal() {
     event.preventDefault();
     submitPasswordAuth();
   });
+
+  elements.authSignOut?.addEventListener("click", () => signOutAuth("auth"));
 
   elements.authModal.addEventListener("click", (event) => {
     if (event.target.matches("[data-close-auth-modal]")) {
@@ -1624,7 +2335,7 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
-function getStoredMessages() {
+function getLocalMessages() {
   try {
     const stored = JSON.parse(localStorage.getItem(MESSAGE_STORAGE_KEY));
     return Array.isArray(stored) ? stored : [];
@@ -1633,7 +2344,15 @@ function getStoredMessages() {
   }
 }
 
-function saveStoredMessages(messages) {
+function getStoredMessages() {
+  if (messageState.syncStatus === "ready" || messageState.syncStatus === "loading") {
+    return messageState.messages;
+  }
+
+  return getLocalMessages();
+}
+
+function saveLocalMessages(messages) {
   try {
     localStorage.setItem(MESSAGE_STORAGE_KEY, JSON.stringify(messages));
     return true;
@@ -1641,6 +2360,102 @@ function saveStoredMessages(messages) {
     setMessageFormHint("图片可能太大了，浏览器本地空间放不下。");
     return false;
   }
+}
+
+function getMessageImageDisplayUrl(pathOrUrl) {
+  const value = String(pathOrUrl || "");
+
+  if (!value || value.startsWith("data:") || value.startsWith("blob:") || value.startsWith("http")) {
+    return value;
+  }
+
+  if (!authState.client) return value;
+
+  const { data } = authState.client.storage
+    .from(MESSAGE_IMAGE_BUCKET)
+    .getPublicUrl(value);
+
+  return data?.publicUrl || value;
+}
+
+function normalizeRemoteMessage(row) {
+  const imagePaths = Array.isArray(row.images)
+    ? row.images
+      .map((item) => (typeof item === "string" ? item : item?.path || item?.url || ""))
+      .filter(Boolean)
+    : [];
+
+  return {
+    id: row.id,
+    boardId: row.board_id,
+    authorId: row.author_id,
+    content: row.content || "",
+    imagePaths,
+    images: imagePaths.map(getMessageImageDisplayUrl),
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function normalizeLocalMessage(message) {
+  return {
+    ...message,
+    imagePaths: message.imagePaths || message.images || [],
+    images: message.images || message.imagePaths || [],
+  };
+}
+
+async function refreshRemoteMessages() {
+  if (!authState.client || !isSiteAuthenticated()) {
+    messageState.syncStatus = "local";
+    messageState.syncError = "";
+    messageState.messages = [];
+    renderMessageBoards();
+    if (messageState.activeBoardId) renderMessageList();
+    return;
+  }
+
+  messageState.syncStatus = "loading";
+  messageState.syncError = "";
+  renderMessageBoards();
+  if (messageState.activeBoardId) {
+    updateMessageAuthStatus();
+    renderMessageList();
+  }
+
+  const { data, error } = await authState.client
+    .from(REMOTE_TABLES.messages)
+    .select("id,board_id,author_id,content,images,created_at,updated_at")
+    .order("updated_at", { ascending: false });
+
+  if (error) {
+    messageState.syncStatus = "error";
+    messageState.syncError = getSyncErrorCopy(error);
+    messageState.messages = getLocalMessages().map(normalizeLocalMessage);
+    renderMessageBoards();
+    if (messageState.activeBoardId) {
+      updateMessageAuthStatus();
+      renderMessageList();
+    }
+    return;
+  }
+
+  messageState.syncStatus = "ready";
+  messageState.syncError = "";
+  messageState.messages = Array.isArray(data) ? data.map(normalizeRemoteMessage) : [];
+  saveLocalMessages(messageState.messages);
+  renderMessageBoards();
+  if (messageState.activeBoardId) {
+    updateMessageAuthStatus();
+    renderMessageList();
+  }
+}
+
+async function refreshRemoteData() {
+  await Promise.all([
+    refreshRemoteWishes(),
+    refreshRemoteMessages(),
+  ]);
 }
 
 function getBoard(boardId) {
@@ -1707,6 +2522,7 @@ function renderMessageBoards() {
       const messages = getBoardMessages(board.id);
       const canViewMessages = isMessageAuthenticated(board.id);
       const isConfigured = isBoardAuthConfigured(board.id);
+      const isLoadingMessages = canViewMessages && messageState.syncStatus === "loading";
 
       return `
         <button class="message-board-card message-board-card-${board.accent} ${canViewMessages ? "" : "is-locked"}" type="button" data-board-id="${board.id}">
@@ -1717,7 +2533,10 @@ function renderMessageBoards() {
             <span>${board.line}</span>
           </span>
           <span class="message-board-stats">
-            ${canViewMessages
+            ${isLoadingMessages
+          ? `<span><b>同步中</b></span>
+                <small>正在读取留言</small>`
+          : canViewMessages
           ? `<span><b>${messages.length}</b> 条留言</span>
                 <small>${getLatestMessageText(messages)}</small>`
           : `<span><b>${isConfigured ? "Private" : "Pending"}</b></span>
@@ -1790,9 +2609,14 @@ async function addMessageImages(files) {
   const selectedFiles = Array.from(files).slice(0, remainingSlots);
 
   try {
-    const imageSources = await Promise.all(selectedFiles.map(readFileAsDataURL));
+    const imageSources = await Promise.all(
+      selectedFiles.map(async (file) => ({
+        src: await readFileAsDataURL(file),
+        file,
+      })),
+    );
     messageState.draftImages = messageState.draftImages.concat(
-      imageSources.map((src) => ({ src })),
+      imageSources,
     );
     renderMessagePreview();
     setMessageFormHint(
@@ -1816,6 +2640,26 @@ function renderMessageList() {
 
   elements.messageFeedTitle.textContent = `${board.owner}的留言记录`;
   elements.messageFeedCount.textContent = `${messages.length} 条`;
+
+  if (messageState.syncStatus === "loading") {
+    elements.messageList.innerHTML = `
+      <div class="message-empty">
+        <strong>正在同步留言</strong>
+        <span>稍等一下，小纸条正在赶来。</span>
+      </div>
+    `;
+    return;
+  }
+
+  if (messageState.syncStatus === "error") {
+    elements.messageList.innerHTML = `
+      <div class="message-empty">
+        <strong>同步暂时不可用</strong>
+        <span>${escapeHTML(messageState.syncError)}</span>
+      </div>
+    `;
+    return;
+  }
 
   if (messages.length === 0) {
     elements.messageList.innerHTML = `
@@ -1845,7 +2689,11 @@ function renderMessageList() {
           <p>${escapeHTML(message.content)}</p>
           ${images.length > 0
           ? `<div class="message-image-grid">${images
-            .map((src, index) => `<img src="${escapeHTML(src)}" alt="留言图片 ${index + 1}">`)
+            .map((src, index) => `
+              <button class="message-image-button" type="button" data-open-message-image="${escapeHTML(message.id)}" data-message-image-index="${index}" aria-label="查看第 ${index + 1} 张留言图片">
+                <img src="${escapeHTML(src)}" alt="留言图片 ${index + 1}">
+              </button>
+            `)
             .join("")}</div>`
           : ""}
           ${canManageMessage
@@ -1858,6 +2706,82 @@ function renderMessageList() {
       `;
     })
     .join("");
+}
+
+function animateMessageImage(direction) {
+  if (direction === 0 || !elements.messageImageFull) return;
+
+  const animationClass = direction > 0 ? "is-sliding-next" : "is-sliding-prev";
+  elements.messageImageFull.classList.remove("is-sliding-next", "is-sliding-prev");
+  void elements.messageImageFull.offsetWidth;
+  elements.messageImageFull.classList.add(animationClass);
+}
+
+function renderMessageImage(direction = 0) {
+  const images = messageImageState.images;
+  const imageCount = images.length;
+
+  if (!elements.messageImageFull || !elements.messageImageCounter) return;
+
+  if (imageCount === 0) {
+    elements.messageImageFull.removeAttribute("src");
+    elements.messageImageFull.alt = "暂无留言图片";
+    elements.messageImageCounter.textContent = "0 / 0";
+    elements.messageImagePrev.disabled = true;
+    elements.messageImageNext.disabled = true;
+    return;
+  }
+
+  const safeIndex = Math.min(Math.max(messageImageState.activeIndex, 0), imageCount - 1);
+  messageImageState.activeIndex = safeIndex;
+  elements.messageImageFull.src = images[safeIndex];
+  elements.messageImageFull.alt = `留言图片 ${safeIndex + 1}`;
+  elements.messageImageCounter.textContent = `${safeIndex + 1} / ${imageCount}`;
+  elements.messageImagePrev.disabled = imageCount <= 1;
+  elements.messageImageNext.disabled = imageCount <= 1;
+  animateMessageImage(direction);
+}
+
+function stepMessageImage(direction) {
+  const imageCount = messageImageState.images.length;
+  if (imageCount <= 1) return;
+
+  messageImageState.activeIndex = (messageImageState.activeIndex + direction + imageCount) % imageCount;
+  renderMessageImage(direction);
+}
+
+function openMessageImageViewer(messageId, imageIndex = 0) {
+  const message = getActiveBoardMessages().find((item) => item.id === messageId);
+  const images = Array.isArray(message?.images) ? message.images : [];
+
+  if (!message || images.length === 0 || !elements.messageImageModal) return;
+
+  messageImageState.messageId = message.id;
+  messageImageState.images = images;
+  messageImageState.activeIndex = Number.isFinite(imageIndex) ? imageIndex : 0;
+  renderMessageImage();
+  elements.messageImageModal.hidden = false;
+  document.body.classList.add("modal-open");
+  elements.messageImageModal.querySelector(".modal-close")?.focus();
+}
+
+function closeMessageImageViewer({ preserveBodyLock = false } = {}) {
+  if (!elements.messageImageModal || elements.messageImageModal.hidden) return;
+
+  elements.messageImageModal.hidden = true;
+  elements.messageImageFull?.removeAttribute("src");
+  messageImageState.messageId = null;
+  messageImageState.images = [];
+  messageImageState.activeIndex = 0;
+
+  if (
+    !preserveBodyLock
+    && elements.messageModal.hidden
+    && elements.tripModal.hidden
+    && elements.authModal.hidden
+  ) {
+    document.body.classList.remove("modal-open");
+  }
 }
 
 function openMessageModal(boardId) {
@@ -1880,9 +2804,14 @@ function openMessageModal(boardId) {
   } else {
     document.querySelector(".message-modal .modal-close").focus();
   }
+
+  if (messageState.syncStatus !== "ready" && messageState.syncStatus !== "loading") {
+    refreshRemoteMessages();
+  }
 }
 
 function closeMessageModal() {
+  closeMessageImageViewer({ preserveBodyLock: true });
   elements.messageModal.hidden = true;
   document.body.classList.remove("modal-open");
   messageState.activeBoardId = null;
@@ -1890,10 +2819,66 @@ function closeMessageModal() {
 }
 
 function createMessageId() {
-  return `message-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  return crypto.randomUUID ? crypto.randomUUID() : `message-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function saveMessageFromForm() {
+function sanitizeStorageFileName(fileName = "image.jpg") {
+  return fileName
+    .normalize("NFKD")
+    .replace(/[^\w.-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "image.jpg";
+}
+
+function dataUrlToBlob(dataUrl) {
+  const [header, data] = String(dataUrl).split(",");
+  const mimeMatch = header.match(/data:([^;]+)/);
+  const mimeType = mimeMatch ? mimeMatch[1] : "image/jpeg";
+  const binary = atob(data || "");
+  const bytes = new Uint8Array(binary.length);
+
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return new Blob([bytes], { type: mimeType });
+}
+
+async function uploadDraftMessageImages(messageId, drafts) {
+  if (!authState.client || messageState.syncStatus === "error") {
+    return drafts.map((image) => image.path || image.src).filter(Boolean);
+  }
+
+  const imagePaths = [];
+
+  for (const [index, image] of drafts.entries()) {
+    if (image.path) {
+      imagePaths.push(image.path);
+      continue;
+    }
+
+    const fileBody = image.file || dataUrlToBlob(image.src);
+    const fileName = sanitizeStorageFileName(image.file?.name || `message-image-${index + 1}.jpg`);
+    const storagePath = `${messageState.activeBoardId}/${messageId}/${Date.now()}-${index}-${fileName}`;
+    const { error } = await authState.client.storage
+      .from(MESSAGE_IMAGE_BUCKET)
+      .upload(storagePath, fileBody, {
+        cacheControl: "3600",
+        contentType: image.file?.type || fileBody.type || "image/jpeg",
+        upsert: false,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    imagePaths.push(storagePath);
+  }
+
+  return imagePaths;
+}
+
+async function saveMessageFromForm() {
   if (!canEditBoard()) {
     setMessageFormHint("这个信箱你只能查看，不能留言或编辑。");
     return;
@@ -1902,8 +2887,9 @@ function saveMessageFromForm() {
   const content = elements.messageText.value.trim();
   const currentAuthor = getCurrentAuthor();
   const authorId = currentAuthor?.id;
-  const imageSources = messageState.draftImages.map((image) => image.src);
   const now = new Date().toISOString();
+  const messageId = messageState.editingMessageId || createMessageId();
+  let imageSources = messageState.draftImages.map((image) => image.path || image.src);
 
   if (!authorId) {
     setMessageFormHint("没有识别出当前登录身份，请重新登录。");
@@ -1915,17 +2901,65 @@ function saveMessageFromForm() {
     return;
   }
 
-  const messages = getStoredMessages();
+  setMessageFormHint("正在同步留言...");
+  elements.messageSubmit.disabled = true;
+
+  if (authState.client && messageState.syncStatus !== "error") {
+    try {
+      imageSources = await uploadDraftMessageImages(messageId, messageState.draftImages);
+
+      if (messageState.editingMessageId) {
+        const { error } = await authState.client
+          .from(REMOTE_TABLES.messages)
+          .update({
+            content,
+            images: imageSources,
+            updated_at: now,
+          })
+          .eq("id", messageState.editingMessageId);
+
+        if (error) throw error;
+      } else {
+        const { error } = await authState.client
+          .from(REMOTE_TABLES.messages)
+          .insert({
+            id: messageId,
+            board_id: messageState.activeBoardId,
+            author_id: authorId,
+            content,
+            images: imageSources,
+            created_at: now,
+            updated_at: now,
+          });
+
+        if (error) throw error;
+      }
+
+      elements.messageSubmit.disabled = false;
+      resetMessageForm();
+      await refreshRemoteMessages();
+      setMessageFormHint("已经同步到留言板啦。");
+      return;
+    } catch (error) {
+      elements.messageSubmit.disabled = false;
+      setMessageFormHint(getSyncErrorCopy(error));
+      return;
+    }
+  }
+
+  const messages = getLocalMessages();
 
   if (messageState.editingMessageId) {
     const targetIndex = messages.findIndex((message) => message.id === messageState.editingMessageId);
 
     if (targetIndex < 0) {
+      elements.messageSubmit.disabled = false;
       setMessageFormHint("这条留言没有找到，可以重新打开留言板。");
       return;
     }
 
     if (!canEditMessage(messages[targetIndex])) {
+      elements.messageSubmit.disabled = false;
       setMessageFormHint("这个信箱你只能查看，不能编辑。");
       return;
     }
@@ -1939,7 +2973,7 @@ function saveMessageFromForm() {
     };
   } else {
     messages.push({
-      id: createMessageId(),
+      id: messageId,
       boardId: messageState.activeBoardId,
       authorId,
       content,
@@ -1949,8 +2983,10 @@ function saveMessageFromForm() {
     });
   }
 
-  if (!saveStoredMessages(messages)) return;
+  elements.messageSubmit.disabled = false;
+  if (!saveLocalMessages(messages)) return;
 
+  messageState.messages = messages.map(normalizeLocalMessage);
   resetMessageForm();
   renderMessageBoards();
   renderMessageList();
@@ -1968,7 +3004,10 @@ function startEditingMessage(messageId) {
 
   messageState.editingMessageId = message.id;
   elements.messageText.value = message.content || "";
-  messageState.draftImages = (message.images || []).map((src) => ({ src }));
+  messageState.draftImages = (message.images || []).map((src, index) => ({
+    src,
+    path: message.imagePaths?.[index] || src,
+  }));
   elements.messageSubmit.textContent = "保存编辑";
   elements.messageCancelEdit.hidden = false;
   renderMessagePreview();
@@ -1976,7 +3015,7 @@ function startEditingMessage(messageId) {
   elements.messageText.focus();
 }
 
-function deleteMessage(messageId) {
+async function deleteMessage(messageId) {
   const message = getStoredMessages().find((item) => item.id === messageId);
 
   if (!message) return;
@@ -1985,13 +3024,36 @@ function deleteMessage(messageId) {
     return;
   }
 
-  const shouldDelete = window.confirm("确定要删除这条留言吗？删除后本地不会再显示。");
+  const shouldDelete = window.confirm("确定要删除这条留言吗？删除后不会再显示。");
 
   if (!shouldDelete) return;
 
-  const nextMessages = getStoredMessages().filter((item) => item.id !== messageId);
+  if (authState.client && messageState.syncStatus !== "error") {
+    setMessageFormHint("正在删除...");
 
-  if (!saveStoredMessages(nextMessages)) return;
+    const { error } = await authState.client
+      .from(REMOTE_TABLES.messages)
+      .delete()
+      .eq("id", messageId);
+
+    if (error) {
+      setMessageFormHint(getSyncErrorCopy(error));
+      return;
+    }
+
+    if (messageState.editingMessageId === messageId) {
+      resetMessageForm();
+    }
+
+    await refreshRemoteMessages();
+    setMessageFormHint("这条留言已经删除。");
+    return;
+  }
+
+  const nextMessages = getLocalMessages().filter((item) => item.id !== messageId);
+
+  if (!saveLocalMessages(nextMessages)) return;
+  messageState.messages = nextMessages.map(normalizeLocalMessage);
 
   if (messageState.editingMessageId === messageId) {
     resetMessageForm();
@@ -2029,8 +3091,17 @@ function bindMessageBoards() {
   });
 
   elements.messageList.addEventListener("click", (event) => {
+    const imageButton = event.target.closest("[data-open-message-image]");
     const editButton = event.target.closest("[data-edit-message]");
     const deleteButton = event.target.closest("[data-delete-message]");
+
+    if (imageButton) {
+      openMessageImageViewer(
+        imageButton.dataset.openMessageImage,
+        Number(imageButton.dataset.messageImageIndex),
+      );
+      return;
+    }
 
     if (editButton) {
       startEditingMessage(editButton.dataset.editMessage);
@@ -2054,7 +3125,32 @@ function bindMessageBoards() {
     }
   });
 
+  elements.messageImageModal?.addEventListener("click", (event) => {
+    if (event.target.matches("[data-close-message-image]")) {
+      closeMessageImageViewer();
+    }
+  });
+
+  elements.messageImagePrev?.addEventListener("click", () => stepMessageImage(-1));
+  elements.messageImageNext?.addEventListener("click", () => stepMessageImage(1));
+
   document.addEventListener("keydown", (event) => {
+    if (!elements.messageImageModal?.hidden) {
+      if (event.key === "Escape") {
+        closeMessageImageViewer();
+      }
+
+      if (event.key === "ArrowLeft") {
+        stepMessageImage(-1);
+      }
+
+      if (event.key === "ArrowRight") {
+        stepMessageImage(1);
+      }
+
+      return;
+    }
+
     if (elements.messageModal.hidden) return;
 
     if (event.key === "Escape") {
@@ -2073,6 +3169,19 @@ function getTripPhotos(trip) {
 
 function getActiveTrip() {
   return appData.trips.find((item) => item.id === tripModalState.activeTripId);
+}
+
+function updateTripAuthStatus() {
+  if (!elements.tripAuthRow || !elements.tripAuthStatus) return;
+
+  if (!isSiteAuthenticated()) {
+    elements.tripAuthRow.hidden = true;
+    elements.tripAuthStatus.textContent = "";
+    return;
+  }
+
+  elements.tripAuthStatus.textContent = `已登录：${getCurrentAuthName()}，可查看专属相册`;
+  elements.tripAuthRow.hidden = false;
 }
 
 function animateModalPhoto(direction) {
@@ -2134,6 +3243,7 @@ function openTripModal(tripId) {
   elements.modalTitle.textContent = trip.place;
   elements.modalEnglish.textContent = trip.englishTitle;
   elements.modalQuote.textContent = trip.quote;
+  updateTripAuthStatus();
   elements.tripModal.hidden = false;
   document.body.classList.add("modal-open");
   document.querySelector(".modal-close").focus();
@@ -2155,6 +3265,7 @@ function bindModal() {
 
   elements.modalPrev.addEventListener("click", () => stepModalPhoto(-1));
   elements.modalNext.addEventListener("click", () => stepModalPhoto(1));
+  elements.tripSignOut?.addEventListener("click", () => signOutAuth("trip"));
 
   document.addEventListener("keydown", (event) => {
     if (elements.tripModal.hidden) return;
@@ -2216,15 +3327,20 @@ function bindMissButton() {
 }
 
 function boot() {
+  clearLegacyWishStorage();
   initLeafletMap();
   startLocationClocks();
   initMusicPlayer();
   renderTrips();
   renderTimeline();
+  renderMilestones();
+  renderWishes();
   renderMessageBoards();
   renderNextMeet();
   bindModal();
   bindAuthModal();
+  bindSiteLoginButton();
+  bindWishes();
   bindMessageBoards();
   bindMissButton();
   bindTimelineScroll();
