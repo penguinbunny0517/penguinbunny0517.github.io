@@ -47,6 +47,15 @@ create table if not exists public.love_messages (
   )
 );
 
+create table if not exists public.love_message_replies (
+  id text primary key default gen_random_uuid()::text,
+  message_id text not null references public.love_messages(id) on delete cascade,
+  author_id text not null check (author_id in ('maimai', 'tutu')),
+  content text not null check (length(trim(content)) > 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table if not exists public.love_wishes (
   id text primary key default gen_random_uuid()::text,
   text text not null check (length(trim(text)) > 0),
@@ -62,12 +71,18 @@ create trigger love_messages_touch_updated_at
 before update on public.love_messages
 for each row execute function public.touch_updated_at();
 
+drop trigger if exists love_message_replies_touch_updated_at on public.love_message_replies;
+create trigger love_message_replies_touch_updated_at
+before update on public.love_message_replies
+for each row execute function public.touch_updated_at();
+
 drop trigger if exists love_wishes_touch_updated_at on public.love_wishes;
 create trigger love_wishes_touch_updated_at
 before update on public.love_wishes
 for each row execute function public.touch_updated_at();
 
 alter table public.love_messages enable row level security;
+alter table public.love_message_replies enable row level security;
 alter table public.love_wishes enable row level security;
 
 drop policy if exists "penguinbunny can read messages" on public.love_messages;
@@ -111,6 +126,43 @@ using (
   and author_id = board_id
 );
 
+drop policy if exists "penguinbunny can read replies" on public.love_message_replies;
+create policy "penguinbunny can read replies"
+on public.love_message_replies
+for select
+to authenticated
+using (public.is_penguinbunny_user());
+
+drop policy if exists "penguinbunny can create replies" on public.love_message_replies;
+create policy "penguinbunny can create replies"
+on public.love_message_replies
+for insert
+to authenticated
+with check (
+  public.current_penguinbunny_author() = author_id
+);
+
+drop policy if exists "reply authors can update replies" on public.love_message_replies;
+create policy "reply authors can update replies"
+on public.love_message_replies
+for update
+to authenticated
+using (
+  public.current_penguinbunny_author() = author_id
+)
+with check (
+  public.current_penguinbunny_author() = author_id
+);
+
+drop policy if exists "reply authors can delete replies" on public.love_message_replies;
+create policy "reply authors can delete replies"
+on public.love_message_replies
+for delete
+to authenticated
+using (
+  public.current_penguinbunny_author() = author_id
+);
+
 drop policy if exists "everyone can read wishes" on public.love_wishes;
 create policy "everyone can read wishes"
 on public.love_wishes
@@ -143,6 +195,7 @@ to authenticated
 using (public.is_penguinbunny_user());
 
 grant select, insert, update, delete on public.love_messages to authenticated;
+grant select, insert, update, delete on public.love_message_replies to authenticated;
 grant select on public.love_wishes to anon, authenticated;
 grant insert, update, delete on public.love_wishes to authenticated;
 

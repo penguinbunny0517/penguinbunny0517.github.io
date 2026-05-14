@@ -2795,7 +2795,7 @@ main {
   white-space: nowrap;
 }
 
-.message-item p {
+.message-content {
   margin: 0;
   color: var(--ink);
   font-family: var(--font-body);
@@ -2804,6 +2804,170 @@ main {
   line-height: 1.72;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
+}
+
+.message-replies {
+  display: grid;
+  gap: 8px;
+  margin-top: 2px;
+  padding: 10px 0 0 12px;
+  border-left: 2px solid rgba(72, 125, 140, 0.24);
+}
+
+.message-reply {
+  display: grid;
+  gap: 5px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: rgba(244, 250, 250, 0.76);
+}
+
+.message-reply-tutu {
+  border: 1px solid rgba(238, 129, 119, 0.12);
+  background: rgba(255, 232, 236, 0.82);
+}
+
+.message-reply-maimai {
+  border: 1px solid rgba(72, 125, 140, 0.12);
+  background: rgba(229, 244, 248, 0.84);
+}
+
+.message-reply-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgba(73, 58, 56, 0.72);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.message-reply-meta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: flex-end;
+}
+
+.message-reply-head time {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.message-reply-actions {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.message-reply-actions button {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(134, 184, 199, 0.16);
+  color: var(--blue-deep);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.message-reply-actions button:hover,
+.message-reply-actions button:focus-visible {
+  outline: none;
+  background: rgba(134, 184, 199, 0.24);
+}
+
+.message-reply-actions .message-reply-delete-button {
+  background: rgba(238, 129, 119, 0.14);
+  color: var(--coral-dark);
+}
+
+.message-reply-actions .message-reply-delete-button:hover,
+.message-reply-actions .message-reply-delete-button:focus-visible {
+  background: rgba(238, 129, 119, 0.24);
+}
+
+.message-reply p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.62;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.message-reply-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.message-reply-form textarea {
+  min-height: 48px;
+  max-height: 120px;
+  resize: vertical;
+  border: 1px solid rgba(127, 107, 102, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 253, 248, 0.9);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.55;
+  outline: none;
+  padding: 9px 10px;
+}
+
+.message-reply-form textarea:focus {
+  border-color: rgba(72, 125, 140, 0.36);
+  box-shadow: 0 0 0 3px rgba(72, 125, 140, 0.12);
+}
+
+.message-reply-form button {
+  width: 58px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(72, 125, 140, 0.16);
+  color: var(--blue-deep);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.message-reply-form button:hover,
+.message-reply-form button:focus-visible {
+  outline: none;
+  background: rgba(72, 125, 140, 0.24);
+}
+
+.message-reply-edit-form {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.message-reply-form .message-reply-cancel-button {
+  background: rgba(127, 107, 102, 0.12);
+  color: rgba(73, 58, 56, 0.8);
+}
+
+.message-reply-form .message-reply-cancel-button:hover,
+.message-reply-form .message-reply-cancel-button:focus-visible {
+  background: rgba(127, 107, 102, 0.2);
 }
 
 .message-image-grid {
@@ -3521,6 +3685,22 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
 
   .message-feed-head {
     padding-right: 42px;
+  }
+
+  .message-reply-form {
+    grid-template-columns: 1fr;
+  }
+
+  .message-reply-edit-form {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .message-reply-edit-form textarea {
+    grid-column: 1 / -1;
+  }
+
+  .message-reply-form button {
+    justify-self: end;
   }
 }
 

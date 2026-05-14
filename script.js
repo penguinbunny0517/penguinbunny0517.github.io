@@ -421,6 +421,7 @@ const REMOVED_DEFAULT_WISH_IDS = new Set([
 ]);
 const REMOTE_TABLES = {
   messages: "love_messages",
+  messageReplies: "love_message_replies",
   wishes: "love_wishes",
 };
 const MESSAGE_IMAGE_BUCKET = "penguinbunny-message-images";
@@ -429,10 +430,13 @@ const MAX_MESSAGE_IMAGES = 6;
 const messageState = {
   activeBoardId: null,
   editingMessageId: null,
+  replyingMessageId: null,
+  editingReplyId: null,
   draftImages: [],
   messages: [],
   syncStatus: "local",
   syncError: "",
+  replySyncError: "",
 };
 
 const messageImageState = {
@@ -1638,7 +1642,12 @@ function normalizeRemoteWish(row) {
 function getSyncErrorCopy(error) {
   const message = String(error?.message || "");
 
-  if (message.includes("love_messages") || message.includes("love_wishes") || message.includes("schema cache")) {
+  if (
+    message.includes("love_messages")
+    || message.includes("love_message_replies")
+    || message.includes("love_wishes")
+    || message.includes("schema cache")
+  ) {
     return "Supabase 同步表还没建好，当前先显示本地预览。";
   }
 
@@ -1994,6 +2003,11 @@ function canEditMessage(message) {
   return Boolean(message && canEditBoard(message.boardId));
 }
 
+function canManageReply(reply) {
+  const author = getCurrentAuthor();
+  return Boolean(reply && author && reply.authorId === author.id);
+}
+
 function setAuthStatus(message = "", tone = "neutral") {
   if (!elements.authStatus) return;
 
@@ -2257,6 +2271,9 @@ async function signOutAuth(source = "site") {
   messageState.messages = [];
   messageState.syncStatus = "local";
   messageState.syncError = "";
+  messageState.replySyncError = "";
+  messageState.replyingMessageId = null;
+  messageState.editingReplyId = null;
 
   if (source === "message") {
     closeMessageModal();
@@ -2310,8 +2327,9 @@ function updateMessageAuthStatus() {
   const isOwner = canEditBoard(boardId);
   const board = getBoard(boardId);
   const syncCopy = messageState.syncStatus === "ready" ? "，已跨设备同步" : "";
+  const replyWarning = messageState.replySyncError ? "，回复同步暂未开启" : "";
   const statusText = isAllowedMessageEmail(email, boardId)
-    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言和编辑" : `可查看${board ? board.title : "留言板"}`}${syncCopy}。`
+    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言、编辑和回复" : `可查看${board ? board.title : "留言板"}并回复`}${syncCopy}${replyWarning}。`
     : "当前账号不在允许名单。";
 
   elements.messageAuthStatus.innerHTML = `
@@ -2413,21 +2431,69 @@ function normalizeRemoteMessage(row) {
     images: imagePaths.map(getMessageImageDisplayUrl),
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    replies: [],
+  };
+}
+
+function normalizeRemoteReply(row) {
+  return {
+    id: row.id,
+    messageId: row.message_id,
+    authorId: row.author_id,
+    content: row.content || "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function normalizeLocalReply(reply, messageId) {
+  return {
+    id: reply.id || createMessageId(),
+    messageId: reply.messageId || messageId,
+    authorId: reply.authorId || "maimai",
+    content: reply.content || "",
+    createdAt: reply.createdAt || reply.updatedAt || new Date().toISOString(),
+    updatedAt: reply.updatedAt || reply.createdAt || new Date().toISOString(),
   };
 }
 
 function normalizeLocalMessage(message) {
+  const normalizedImagePaths = message.imagePaths || message.images || [];
+
   return {
     ...message,
-    imagePaths: message.imagePaths || message.images || [],
-    images: message.images || message.imagePaths || [],
+    imagePaths: normalizedImagePaths,
+    images: message.images || normalizedImagePaths,
+    replies: Array.isArray(message.replies)
+      ? message.replies.map((reply) => normalizeLocalReply(reply, message.id))
+      : [],
   };
+}
+
+function attachRepliesToMessages(messages, replies) {
+  const repliesByMessage = new Map();
+
+  replies.forEach((reply) => {
+    const messageReplies = repliesByMessage.get(reply.messageId) || [];
+    messageReplies.push(reply);
+    repliesByMessage.set(reply.messageId, messageReplies);
+  });
+
+  return messages.map((message) => ({
+    ...message,
+    replies: (repliesByMessage.get(message.id) || []).sort((first, second) => {
+      const firstTime = new Date(first.createdAt || first.updatedAt).getTime();
+      const secondTime = new Date(second.createdAt || second.updatedAt).getTime();
+      return firstTime - secondTime;
+    }),
+  }));
 }
 
 async function refreshRemoteMessages() {
   if (!authState.client || !isSiteAuthenticated()) {
     messageState.syncStatus = "local";
     messageState.syncError = "";
+    messageState.replySyncError = "";
     messageState.messages = [];
     renderMessageBoards();
     if (messageState.activeBoardId) renderMessageList();
@@ -2436,6 +2502,7 @@ async function refreshRemoteMessages() {
 
   messageState.syncStatus = "loading";
   messageState.syncError = "";
+  messageState.replySyncError = "";
   renderMessageBoards();
   if (messageState.activeBoardId) {
     updateMessageAuthStatus();
@@ -2461,7 +2528,15 @@ async function refreshRemoteMessages() {
 
   messageState.syncStatus = "ready";
   messageState.syncError = "";
-  messageState.messages = Array.isArray(data) ? data.map(normalizeRemoteMessage) : [];
+  const { data: replyData, error: replyError } = await authState.client
+    .from(REMOTE_TABLES.messageReplies)
+    .select("id,message_id,author_id,content,created_at,updated_at")
+    .order("created_at", { ascending: true });
+  const messages = Array.isArray(data) ? data.map(normalizeRemoteMessage) : [];
+  const replies = Array.isArray(replyData) ? replyData.map(normalizeRemoteReply) : [];
+
+  messageState.replySyncError = replyError ? getSyncErrorCopy(replyError) : "";
+  messageState.messages = attachRepliesToMessages(messages, replies);
   saveLocalMessages(messageState.messages);
   renderMessageBoards();
   if (messageState.activeBoardId) {
@@ -2523,6 +2598,95 @@ function getMessageStatus(message) {
   const isEdited = updatedAt && createdAt && updatedAt !== createdAt;
 
   return `${formatMessageDate(updatedAt || createdAt)} ${isEdited ? "已编辑" : "已创建"}`;
+}
+
+function getReplyStatus(reply) {
+  const createdAt = reply.createdAt || reply.updatedAt;
+  const updatedAt = reply.updatedAt || reply.createdAt;
+  const isEdited = updatedAt && createdAt && updatedAt !== createdAt;
+
+  return `${formatMessageDate(updatedAt || createdAt)} ${isEdited ? "已编辑" : "已回复"}`;
+}
+
+function getMessageReplies(message) {
+  if (!Array.isArray(message?.replies)) return [];
+
+  return [...message.replies].sort((first, second) => {
+    const firstTime = new Date(first.createdAt || first.updatedAt).getTime();
+    const secondTime = new Date(second.createdAt || second.updatedAt).getTime();
+    return firstTime - secondTime;
+  });
+}
+
+function findReplyById(replyId) {
+  for (const message of getActiveBoardMessages()) {
+    const reply = getMessageReplies(message).find((item) => item.id === replyId);
+
+    if (reply) {
+      return { message, reply };
+    }
+  }
+
+  return null;
+}
+
+function renderMessageReplyEditForm(reply) {
+  return `
+    <form class="message-reply-form message-reply-edit-form" data-edit-reply-form="${escapeHTML(reply.id)}">
+      <textarea name="replyContent" maxlength="240" rows="2" required>${escapeHTML(reply.content)}</textarea>
+      <button type="submit">保存</button>
+      <button class="message-reply-cancel-button" type="button" data-cancel-reply-edit>取消</button>
+    </form>
+  `;
+}
+
+function renderMessageReplies(message) {
+  const replies = getMessageReplies(message);
+
+  if (replies.length === 0) return "";
+
+  return `
+    <div class="message-replies" aria-label="留言回复">
+      ${replies
+      .map((reply) => {
+        const author = getAuthor(reply.authorId);
+        const isEditingReply = messageState.editingReplyId === reply.id;
+        const canManageReplyItem = canManageReply(reply);
+
+        return `
+          <div class="message-reply message-reply-${escapeHTML(reply.authorId)}" data-reply-id="${escapeHTML(reply.id)}">
+            <div class="message-reply-head">
+              <span>${author.emoji} ${escapeHTML(author.name)}</span>
+              <span class="message-reply-meta">
+                <time datetime="${escapeHTML(reply.updatedAt || reply.createdAt)}">${getReplyStatus(reply)}</time>
+                ${canManageReplyItem && !isEditingReply
+                  ? `<span class="message-reply-actions">
+                      <button type="button" data-edit-reply="${escapeHTML(reply.id)}">编辑</button>
+                      <button class="message-reply-delete-button" type="button" data-delete-reply="${escapeHTML(reply.id)}">删除</button>
+                    </span>`
+                  : ""}
+              </span>
+            </div>
+            ${isEditingReply ? renderMessageReplyEditForm(reply) : `<p>${escapeHTML(reply.content)}</p>`}
+          </div>
+        `;
+      })
+      .join("")}
+    </div>
+  `;
+}
+
+function renderMessageReplyForm(message) {
+  if (!isMessageAuthenticated(message.boardId) || messageState.replyingMessageId !== message.id) {
+    return "";
+  }
+
+  return `
+    <form class="message-reply-form" data-reply-form="${escapeHTML(message.id)}">
+      <textarea name="replyContent" maxlength="240" rows="2" placeholder="给这张小纸条回一句话～" required></textarea>
+      <button type="submit">发送</button>
+    </form>
+  `;
 }
 
 function getLatestMessageText(messages) {
@@ -2683,7 +2847,7 @@ function renderMessageList() {
   if (messages.length === 0) {
     elements.messageList.innerHTML = `
       <div class="message-empty">
-        <strong>这里还没有留言</strong>
+        <strong>这里还没有留言哦～</strong>
         <span>${isEditableBoard ? "第一张小纸条，等你来写。" : "这里暂时还没有小纸条。"}</span>
       </div>
     `;
@@ -2695,17 +2859,19 @@ function renderMessageList() {
       const author = getAuthor(message.authorId);
       const images = Array.isArray(message.images) ? message.images : [];
       const canManageMessage = canEditMessage(message);
+      const canReplyMessage = isMessageAuthenticated(message.boardId);
+      const isReplying = messageState.replyingMessageId === message.id;
 
       return `
-        <article class="message-item" data-message-id="${message.id}">
+        <article class="message-item" data-message-id="${escapeHTML(message.id)}">
           <div class="message-item-head">
             <span class="message-author">
               <span aria-hidden="true">${author.emoji}</span>
-              ${author.name}
+              ${escapeHTML(author.name)}
             </span>
             <time datetime="${escapeHTML(message.updatedAt || message.createdAt)}">${getMessageStatus(message)}</time>
           </div>
-          <p>${escapeHTML(message.content)}</p>
+          <p class="message-content">${escapeHTML(message.content)}</p>
           ${images.length > 0
           ? `<div class="message-image-grid">${images
             .map((src, index) => `
@@ -2715,10 +2881,13 @@ function renderMessageList() {
             `)
             .join("")}</div>`
           : ""}
-          ${canManageMessage
+          ${renderMessageReplies(message)}
+          ${renderMessageReplyForm(message)}
+          ${canManageMessage || canReplyMessage
           ? `<div class="message-item-actions">
-              <button type="button" data-edit-message="${message.id}">编辑</button>
-              <button class="message-delete-button" type="button" data-delete-message="${message.id}">删除</button>
+              ${canReplyMessage ? `<button type="button" data-toggle-reply="${escapeHTML(message.id)}">${isReplying ? "收起" : "回复"}</button>` : ""}
+              ${canManageMessage ? `<button type="button" data-edit-message="${escapeHTML(message.id)}">编辑</button>` : ""}
+              ${canManageMessage ? `<button class="message-delete-button" type="button" data-delete-message="${escapeHTML(message.id)}">删除</button>` : ""}
             </div>`
           : ""}
         </article>
@@ -2810,6 +2979,8 @@ function openMessageModal(boardId) {
   if (!ensureMessageAuth(board.id)) return;
 
   messageState.activeBoardId = board.id;
+  messageState.replyingMessageId = null;
+  messageState.editingReplyId = null;
   elements.messageModalTitle.textContent = board.title;
   elements.messageModalSubtitle.textContent = board.line;
   resetMessageForm();
@@ -2834,6 +3005,8 @@ function closeMessageModal() {
   elements.messageModal.hidden = true;
   document.body.classList.remove("modal-open");
   messageState.activeBoardId = null;
+  messageState.replyingMessageId = null;
+  messageState.editingReplyId = null;
   resetMessageForm();
 }
 
@@ -3021,6 +3194,8 @@ function startEditingMessage(messageId) {
     return;
   }
 
+  messageState.replyingMessageId = null;
+  messageState.editingReplyId = null;
   messageState.editingMessageId = message.id;
   elements.messageText.value = message.content || "";
   messageState.draftImages = (message.images || []).map((src, index) => ({
@@ -3064,6 +3239,12 @@ async function deleteMessage(messageId) {
       resetMessageForm();
     }
 
+    if (messageState.replyingMessageId === messageId) {
+      messageState.replyingMessageId = null;
+    }
+
+    messageState.editingReplyId = null;
+
     await refreshRemoteMessages();
     setMessageFormHint("这条留言已经删除。");
     return;
@@ -3078,9 +3259,277 @@ async function deleteMessage(messageId) {
     resetMessageForm();
   }
 
+  if (messageState.replyingMessageId === messageId) {
+    messageState.replyingMessageId = null;
+  }
+
+  messageState.editingReplyId = null;
+
   renderMessageBoards();
   renderMessageList();
   setMessageFormHint("这条留言已经删除。");
+}
+
+function toggleMessageReply(messageId) {
+  if (!isMessageAuthenticated(messageState.activeBoardId)) {
+    setMessageFormHint("登录后才能回复小纸条。");
+    return;
+  }
+
+  messageState.editingReplyId = null;
+  messageState.replyingMessageId = messageState.replyingMessageId === messageId ? null : messageId;
+  renderMessageList();
+
+  if (messageState.replyingMessageId) {
+    requestAnimationFrame(() => {
+      const replyForm = Array.from(elements.messageList.querySelectorAll("[data-reply-form]"))
+        .find((form) => form.dataset.replyForm === messageId);
+      const textarea = replyForm?.querySelector("textarea");
+      textarea?.focus();
+    });
+  }
+}
+
+async function addMessageReply(messageId, content) {
+  const text = content.trim();
+  const currentAuthor = getCurrentAuthor();
+  const authorId = currentAuthor?.id;
+  const now = new Date().toISOString();
+
+  if (!authorId || !isMessageAuthenticated(messageState.activeBoardId)) {
+    setMessageFormHint("登录后才能回复小纸条。");
+    return;
+  }
+
+  if (!text) {
+    setMessageFormHint("先写一句回复吧。");
+    return;
+  }
+
+  const targetMessage = getActiveBoardMessages().find((message) => message.id === messageId);
+
+  if (!targetMessage) {
+    setMessageFormHint("这条留言没有找到，可以重新打开留言板。");
+    return;
+  }
+
+  setMessageFormHint("正在同步回复...");
+
+  if (authState.client && messageState.syncStatus !== "error") {
+    const { error } = await authState.client
+      .from(REMOTE_TABLES.messageReplies)
+      .insert({
+        id: createMessageId(),
+        message_id: messageId,
+        author_id: authorId,
+        content: text,
+        created_at: now,
+        updated_at: now,
+      });
+
+    if (error) {
+      messageState.replySyncError = getSyncErrorCopy(error);
+      updateMessageAuthStatus();
+      setMessageFormHint(getSyncErrorCopy(error));
+      return;
+    }
+
+    messageState.replyingMessageId = null;
+    await refreshRemoteMessages();
+    setMessageFormHint("回复已经放到小纸条下面啦。");
+    return;
+  }
+
+  const messages = getStoredMessages().map(normalizeLocalMessage);
+  const targetIndex = messages.findIndex((message) => message.id === messageId);
+
+  if (targetIndex < 0) {
+    setMessageFormHint("这条留言没有找到，可以重新打开留言板。");
+    return;
+  }
+
+  const reply = {
+    id: createMessageId(),
+    messageId,
+    authorId,
+    content: text,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  messages[targetIndex] = {
+    ...messages[targetIndex],
+    replies: [...getMessageReplies(messages[targetIndex]), reply],
+  };
+
+  if (!saveLocalMessages(messages)) return;
+
+  messageState.messages = messages.map(normalizeLocalMessage);
+  messageState.replyingMessageId = null;
+  renderMessageBoards();
+  renderMessageList();
+  setMessageFormHint("回复已经放到小纸条下面啦。");
+}
+
+function startEditingReply(replyId) {
+  const found = findReplyById(replyId);
+
+  if (!found) return;
+  if (!canManageReply(found.reply)) {
+    setMessageFormHint("只能编辑自己写下的回复。");
+    return;
+  }
+
+  messageState.replyingMessageId = null;
+  messageState.editingReplyId = replyId;
+  renderMessageList();
+  setMessageFormHint("正在编辑这条回复。");
+
+  requestAnimationFrame(() => {
+    const editForm = Array.from(elements.messageList.querySelectorAll("[data-edit-reply-form]"))
+      .find((form) => form.dataset.editReplyForm === replyId);
+    const textarea = editForm?.querySelector("textarea");
+    textarea?.focus();
+    textarea?.setSelectionRange(textarea.value.length, textarea.value.length);
+  });
+}
+
+function cancelEditingReply() {
+  messageState.editingReplyId = null;
+  renderMessageList();
+  setMessageFormHint("");
+}
+
+async function updateMessageReply(replyId, content) {
+  const text = content.trim();
+  const currentAuthor = getCurrentAuthor();
+  const authorId = currentAuthor?.id;
+  const now = new Date().toISOString();
+  const found = findReplyById(replyId);
+
+  if (!found) {
+    setMessageFormHint("这条回复没有找到，可以重新打开留言板。");
+    return;
+  }
+
+  if (!authorId || !canManageReply(found.reply)) {
+    setMessageFormHint("只能编辑自己写下的回复。");
+    return;
+  }
+
+  if (!text) {
+    setMessageFormHint("回复内容不能为空。");
+    return;
+  }
+
+  setMessageFormHint("正在保存回复...");
+
+  if (authState.client && messageState.syncStatus !== "error") {
+    const { error } = await authState.client
+      .from(REMOTE_TABLES.messageReplies)
+      .update({
+        content: text,
+        updated_at: now,
+      })
+      .eq("id", replyId)
+      .eq("author_id", authorId);
+
+    if (error) {
+      setMessageFormHint(getSyncErrorCopy(error));
+      return;
+    }
+
+    messageState.editingReplyId = null;
+    await refreshRemoteMessages();
+    setMessageFormHint("回复已经更新。");
+    return;
+  }
+
+  const messages = getStoredMessages().map(normalizeLocalMessage);
+  const targetIndex = messages.findIndex((message) => message.id === found.message.id);
+
+  if (targetIndex < 0) {
+    setMessageFormHint("这条回复没有找到，可以重新打开留言板。");
+    return;
+  }
+
+  messages[targetIndex] = {
+    ...messages[targetIndex],
+    replies: getMessageReplies(messages[targetIndex]).map((reply) => (
+      reply.id === replyId
+        ? { ...reply, content: text, updatedAt: now }
+        : reply
+    )),
+  };
+
+  if (!saveLocalMessages(messages)) return;
+
+  messageState.messages = messages.map(normalizeLocalMessage);
+  messageState.editingReplyId = null;
+  renderMessageBoards();
+  renderMessageList();
+  setMessageFormHint("回复已经更新。");
+}
+
+async function deleteMessageReply(replyId) {
+  const found = findReplyById(replyId);
+  const currentAuthor = getCurrentAuthor();
+  const authorId = currentAuthor?.id;
+
+  if (!found) return;
+  if (!authorId || !canManageReply(found.reply)) {
+    setMessageFormHint("只能删除自己写下的回复。");
+    return;
+  }
+
+  const shouldDelete = window.confirm("确定要删除这条回复吗？删除后不会再显示。");
+
+  if (!shouldDelete) return;
+
+  if (authState.client && messageState.syncStatus !== "error") {
+    setMessageFormHint("正在删除回复...");
+
+    const { error } = await authState.client
+      .from(REMOTE_TABLES.messageReplies)
+      .delete()
+      .eq("id", replyId)
+      .eq("author_id", authorId);
+
+    if (error) {
+      setMessageFormHint(getSyncErrorCopy(error));
+      return;
+    }
+
+    if (messageState.editingReplyId === replyId) {
+      messageState.editingReplyId = null;
+    }
+
+    await refreshRemoteMessages();
+    setMessageFormHint("这条回复已经删除。");
+    return;
+  }
+
+  const messages = getStoredMessages().map(normalizeLocalMessage);
+  const targetIndex = messages.findIndex((message) => message.id === found.message.id);
+
+  if (targetIndex < 0) return;
+
+  messages[targetIndex] = {
+    ...messages[targetIndex],
+    replies: getMessageReplies(messages[targetIndex]).filter((reply) => reply.id !== replyId),
+  };
+
+  if (!saveLocalMessages(messages)) return;
+
+  messageState.messages = messages.map(normalizeLocalMessage);
+
+  if (messageState.editingReplyId === replyId) {
+    messageState.editingReplyId = null;
+  }
+
+  renderMessageBoards();
+  renderMessageList();
+  setMessageFormHint("这条回复已经删除。");
 }
 
 function bindMessageBoards() {
@@ -3113,6 +3562,10 @@ function bindMessageBoards() {
     const imageButton = event.target.closest("[data-open-message-image]");
     const editButton = event.target.closest("[data-edit-message]");
     const deleteButton = event.target.closest("[data-delete-message]");
+    const replyButton = event.target.closest("[data-toggle-reply]");
+    const replyEditButton = event.target.closest("[data-edit-reply]");
+    const replyDeleteButton = event.target.closest("[data-delete-reply]");
+    const replyCancelEditButton = event.target.closest("[data-cancel-reply-edit]");
 
     if (imageButton) {
       openMessageImageViewer(
@@ -3129,7 +3582,43 @@ function bindMessageBoards() {
 
     if (deleteButton) {
       deleteMessage(deleteButton.dataset.deleteMessage);
+      return;
     }
+
+    if (replyButton) {
+      toggleMessageReply(replyButton.dataset.toggleReply);
+      return;
+    }
+
+    if (replyEditButton) {
+      startEditingReply(replyEditButton.dataset.editReply);
+      return;
+    }
+
+    if (replyDeleteButton) {
+      deleteMessageReply(replyDeleteButton.dataset.deleteReply);
+      return;
+    }
+
+    if (replyCancelEditButton) {
+      cancelEditingReply();
+    }
+  });
+
+  elements.messageList.addEventListener("submit", (event) => {
+    const replyEditForm = event.target.closest("[data-edit-reply-form]");
+    const replyForm = event.target.closest("[data-reply-form]");
+
+    if (replyEditForm) {
+      event.preventDefault();
+      updateMessageReply(replyEditForm.dataset.editReplyForm, replyEditForm.elements.replyContent.value);
+      return;
+    }
+
+    if (!replyForm) return;
+
+    event.preventDefault();
+    addMessageReply(replyForm.dataset.replyForm, replyForm.elements.replyContent.value);
   });
 
   elements.messageAuthStatus.addEventListener("click", (event) => {
