@@ -1704,7 +1704,6 @@ function renderWishes() {
   const pendingCount = wishes.length - completedCount;
   const canUseWishes = isSiteAuthenticated();
   const isSyncing = wishState.syncStatus === "loading";
-  const isSynced = wishState.syncStatus === "ready";
 
   elements.wishStats.innerHTML = `
     <span><b>${pendingCount}</b> 个想一起做</span>
@@ -1716,7 +1715,7 @@ function renderWishes() {
   } else if (isSyncing) {
     elements.wishAuthHint.innerHTML = "<span>正在同步小愿望...</span>";
   } else if (canUseWishes) {
-    elements.wishAuthHint.innerHTML = `<span>已登录：${escapeHTML(getCurrentAuthName())}，${isSynced ? "已开启跨设备同步" : "可以新增和打卡"}。</span>`;
+    elements.wishAuthHint.innerHTML = `<span>已登录：${escapeHTML(getCurrentAuthName())}，可以新增和打卡。</span>`;
   } else {
     elements.wishAuthHint.innerHTML = `<span>登录后可以新增愿望和打卡。</span><button type="button" data-wish-login>登录</button>`;
   }
@@ -2326,10 +2325,9 @@ function updateMessageAuthStatus() {
   const author = getCurrentAuthor();
   const isOwner = canEditBoard(boardId);
   const board = getBoard(boardId);
-  const syncCopy = messageState.syncStatus === "ready" ? "，已跨设备同步" : "";
   const replyWarning = messageState.replySyncError ? "，回复同步暂未开启" : "";
   const statusText = isAllowedMessageEmail(email, boardId)
-    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言、编辑和回复" : `可查看${board ? board.title : "留言板"}并回复`}${syncCopy}${replyWarning}。`
+    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言、编辑和回复" : `可查看${board ? board.title : "留言板"}并回复`}${replyWarning}。`
     : "当前账号不在允许名单。";
 
   elements.messageAuthStatus.innerHTML = `
