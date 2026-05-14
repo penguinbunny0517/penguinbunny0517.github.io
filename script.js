@@ -36,10 +36,28 @@ const appData = {
       src: "assets/musics/麦恩莉-方大同.mp3",
     },
     {
+      id: "special-one",
+      title: "特别的人",
+      artist: "方大同",
+      src: "assets/musics/特别的人-方大同.mp3",
+    },
+    {
       id: "summer-firework",
       title: "夏夜最后的烟火",
       artist: "颜人中",
       src: "assets/musics/夏夜最后的烟火-颜人中.mp3",
+    },
+    {
+      id: "first-day",
+      title: "第一天",
+      artist: "孙燕姿",
+      src: "assets/musics/第一天-孙燕姿.mp3",
+    },
+    {
+      id: "warm-warm",
+      title: "暖暖",
+      artist: "梁静茹",
+      src: "assets/musics/暖暖-梁静茹.mp3",
     },
     {
       id: "only-you",
@@ -48,11 +66,11 @@ const appData = {
       src: "assets/musics/唯你懂我心-汪苏泷.mp3",
     },
     {
-      id: "first-day",
-      title: "第一天",
-      artist: "孙燕姿",
-      src: "assets/musics/第一天-孙燕姿.mp3",
-    }
+      id: "autumn-breeze",
+      title: "Autumn Breeze",
+      artist: "JIDA / Rachel Lim",
+      src: "assets/musics/AutumnBreeze-JIDA&RachelLim.mp3",
+    },
   ],
   messageAuthors: [
     {
@@ -76,7 +94,7 @@ const appData = {
       englishTitle: "Penguin's Mailbox",
       accent: "penguin",
       emoji: "🐧",
-      line: "“他们写了日影一封信。”",
+      line: "「他们写了日影一封信。」",
       allowedEmails: ["suzhiyuan0326@163.com", "penguinbunny0517@163.com"],
     },
     {
@@ -86,7 +104,7 @@ const appData = {
       englishTitle: "Bunny's Mailbox",
       accent: "rabbit",
       emoji: "🐰",
-      line: "“我的诗情没有两片叶子。”",
+      line: "「我的诗情没有两片叶子。」",
       allowedEmails: ["suzhiyuan0326@163.com", "penguinbunny0517@163.com"],
     },
   ],
@@ -116,7 +134,7 @@ const appData = {
         "assets/trips/dalian/dalian10.jpg",
         "assets/trips/dalian/dalian11.jpg",
       ],
-      quote: "“这是一个港口，我在这里爱你。”",
+      quote: "「这是一个港口，我在这里爱你。」",
     },
     {
       id: "beijing-zoo",
@@ -145,7 +163,7 @@ const appData = {
         "assets/trips/beijing-zoo/beiye16.jpg",
         "assets/trips/beijing-zoo/beiye17.jpg",
       ],
-      quote: "“都可以随便的，你说的，我都愿意去，小火车摆动的旋律。”",
+      quote: "「都可以随便的，你说的，我都愿意去，小火车摆动的旋律。」",
     },
     {
       id: "tianjin",
@@ -168,7 +186,7 @@ const appData = {
         "assets/trips/tianjin/tianjin10.jpg",
         "assets/trips/tianjin/tianjin11.jpg",
       ],
-      quote: "“パッと光って咲いた、花火を見ていた。”",
+      quote: "「パッと光って咲いた、花火を見ていた。」",
     },
     {
       id: "universal",
@@ -188,7 +206,7 @@ const appData = {
         "assets/trips/universal/huanqiu7.jpg",
         "assets/trips/universal/huanqiu8.jpg",
       ],
-      quote: "“要说说笑笑，随风飘飘，永不坠落。”",
+      quote: "「要说说笑笑，随风飘飘，永不坠落。」",
     },
     {
       id: "jeju",
@@ -233,7 +251,7 @@ const appData = {
         "assets/trips/jeju/jeju32.jpg",
         "assets/trips/jeju/jeju33.jpg",
       ],
-      quote: "“你记得我最纯净的轮廓，握住小小风车和放肆的梦。”"
+      quote: "「你记得我最纯净的轮廓，握住小小风车和放肆的梦。」"
     },
   ],
   longingMessages: [
@@ -246,22 +264,22 @@ const appData = {
     {
       date: "2025.04.27",
       tag: "鹅与兔的相识！",
-      text: "“我中过最惊喜的彩券...”",
+      text: "「我中过最惊喜的彩券...」",
     },
     {
       date: "2025.05.11",
       tag: "鹅兔初见！第一天 & 暖暖～",
-      text: "“爱是腾空的魔幻，第一天的纯真色彩它总是永远那么灿烂。”",
+      text: "「爱是腾空的魔幻，第一天的纯真色彩它总是永远那么灿烂。」",
     },
     {
       date: "2025.05.17",
       tag: "在一起啦！",
-      text: "“我想写一首诗，犹如日，犹如月，犹如午阴，犹如无边落木萧萧下——我的诗情没有两片叶子。”",
+      text: "「我想写一首诗，犹如日，犹如月，犹如午阴，犹如无边落木萧萧下——我的诗情没有两片叶子。」",
     },
     {
       date: "2025.05.20",
       tag: "第一个520，互送花花～🌷",
-      text: "“小王子有他的玫瑰，而你也是我唯一的玫瑰。”",
+      text: "「小王子有他的玫瑰，而你也是我唯一的玫瑰。」",
     },
     {
       date: "2025.05.31",
@@ -271,17 +289,17 @@ const appData = {
     {
       date: "2025.06.21",
       tag: "朋友圈官宣！",
-      text: "“感谢你的出现，过去的往事就如烟～”",
+      text: "「感谢你的出现，过去的往事就如烟～」",
     },
     {
       date: "2025.07.06",
       tag: "第一次异地开始（呜呜呜）",
-      text: "“全世界的水都会重逢，每条路也都会带我们归家。”",
+      text: "「全世界的水都会重逢，每条路也都会带我们归家。」",
     },
     {
       date: "2025.08.25",
       tag: "100天！",
-      text: "“我在这里爱你。”",
+      text: "「我在这里爱你。」",
     },
     {
       date: "2025.10.03",
@@ -291,17 +309,17 @@ const appData = {
     {
       date: "2025.10.04-2025.10.08",
       tag: "鹅兔的大连之旅！",
-      text: "“跳动的世界里找你的频率～”",
+      text: "「跳动的世界里找你的频率～」",
     },
     {
       date: "2025.10.18",
       tag: "一起去圆明园～",
-      text: "\"I can take you far far away, far enough for us to dissappear.\"",
+      text: "「I can take you far far away, far enough for us to dissappear.」",
     },
     {
       date: "2025.11.16",
       tag: "北野一日游！",
-      text: "“我们小手拉大手，一起郊游，今天别想太多～”",
+      text: "「我们小手拉大手，一起郊游，今天别想太多～」",
     },
     {
       date: "2025.12.12",
@@ -326,7 +344,7 @@ const appData = {
     {
       date: "2026.03.25-2026.03.29",
       tag: "Kiss in Jeju! 🍊",
-      text: "\"나가서 바람이나 좀 쐐, 아무도 찾지 않는 곳에.\""
+      text: "「나가서 바람이나 좀 쐐, 아무도 찾지 않는 곳에.」"
     },
     {
       date: "2026.04.19",
@@ -810,8 +828,9 @@ function updateMapRoute({ fit = false } = {}) {
 
   if (!mapState.route) {
     mapState.route = L.polyline(points, {
-      color: "#df7d5d",
-      dashArray: "8 10",
+      className: "leaflet-distance-route",
+      color: "#487d8c",
+      dashArray: "7 9",
       interactive: false,
       opacity: sameSpot ? 0 : 0.74,
       weight: 3,
@@ -2110,7 +2129,7 @@ function openAuthModal(boardId = null, options = {}) {
   } else if (context === "site") {
     setAuthStatus(
       authState.session
-        ? `已登录：${getCurrentAuthName()}，旅行相册、留言板和愿望清单权限已打开。`
+        ? `已登录：${getCurrentAuthName()}，专属权限已打开。`
         : "只给麦麦和兔兔使用。",
       authState.session ? "success" : "neutral"
     );
@@ -2214,7 +2233,7 @@ async function submitPasswordAuth() {
     authState.pendingTripId = null;
     elements.authForm.hidden = true;
     setAuthSignOutVisible(true);
-    setAuthStatus(`已登录：${getCurrentAuthName()}，旅行相册、留言板和愿望清单权限已打开。`, "success");
+    setAuthStatus(`已登录：${getCurrentAuthName()}，专属权限已打开。`, "success");
     return;
   }
 
@@ -2292,7 +2311,7 @@ function updateMessageAuthStatus() {
   const board = getBoard(boardId);
   const syncCopy = messageState.syncStatus === "ready" ? "，已跨设备同步" : "";
   const statusText = isAllowedMessageEmail(email, boardId)
-    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言和编辑" : `可查看${board ? board.title : "留言板"}`}${syncCopy}`
+    ? `已登录：${author ? author.name : "专属账号"}，${isOwner ? "可留言和编辑" : `可查看${board ? board.title : "留言板"}`}${syncCopy}。`
     : "当前账号不在允许名单。";
 
   elements.messageAuthStatus.innerHTML = `
@@ -3180,7 +3199,7 @@ function updateTripAuthStatus() {
     return;
   }
 
-  elements.tripAuthStatus.textContent = `已登录：${getCurrentAuthName()}，可查看专属相册`;
+  elements.tripAuthStatus.textContent = `已登录：${getCurrentAuthName()}，可查看专属相册。`;
   elements.tripAuthRow.hidden = false;
 }
 

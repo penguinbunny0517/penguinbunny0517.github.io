@@ -4,9 +4,10 @@
   --muted: #7f6b66;
   --paper: #fff9f1;
   --paper-strong: #fffdf8;
-  --paper-canvas: #fbf2e7;
-  --paper-canvas-light: #fff9ef;
-  --paper-texture: url("assets/images/paper-grain.svg");
+  --canvas: #f7efe5;
+  --canvas-light: #fffaf4;
+  --canvas-cool: #f3f5f0;
+  --luxe-texture: url("assets/decor/luxe-background-texture.svg");
   --coral: #ee8177;
   --coral-dark: #c95855;
   --blue: #86b8c7;
@@ -53,13 +54,13 @@ body {
   min-width: 320px;
   margin: 0;
   color: var(--ink);
-  background-color: var(--paper-canvas);
+  background-color: var(--canvas);
   background:
-    var(--paper-texture),
-    linear-gradient(180deg, var(--paper-canvas-light) 0%, var(--paper-canvas) 100%);
+    var(--luxe-texture),
+    linear-gradient(135deg, var(--canvas-light) 0%, var(--canvas) 48%, var(--canvas-cool) 100%);
   background-attachment: fixed, fixed;
   background-repeat: repeat, no-repeat;
-  background-size: 220px 220px, 100% 100%;
+  background-size: 640px 640px, 100% 100%;
   font-family: var(--font-body);
   font-weight: 300;
   letter-spacing: 0;
@@ -99,12 +100,12 @@ main {
   inset: 0;
   pointer-events: none;
   content: "";
-  opacity: 0.16;
+  opacity: 0.42;
   background-image:
-    var(--paper-texture),
-    linear-gradient(104deg, transparent 0 42%, rgba(127, 107, 102, 0.055) 42.4%, transparent 43%),
-    linear-gradient(84deg, transparent 0 63%, rgba(127, 107, 102, 0.045) 63.3%, transparent 64%);
-  background-size: 220px 220px, 520px 100%, 460px 100%;
+    linear-gradient(115deg, transparent 0 13%, rgba(255, 253, 248, 0.16) 13.15%, transparent 13.55%, transparent 100%),
+    linear-gradient(64deg, transparent 0 57%, rgba(127, 107, 102, 0.055) 57.15%, transparent 57.45%, transparent 100%),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.24), rgba(255, 253, 248, 0));
+  background-size: 420px 100%, 520px 100%, 100% 100%;
   mix-blend-mode: multiply;
 }
 
@@ -729,6 +730,12 @@ main {
 .map-canvas .leaflet-control-zoom a:focus-visible {
   background: #fff4e3;
   color: var(--coral-dark);
+}
+
+.leaflet-distance-route {
+  filter: drop-shadow(0 0 5px rgba(72, 125, 140, 0.22));
+  stroke-linecap: round;
+  animation: distanceRouteFlow 1.25s linear infinite;
 }
 
 .leaflet-couple-pin {
@@ -2746,9 +2753,10 @@ main {
 }
 
 .message-item {
+  position: relative;
   display: grid;
   gap: 12px;
-  padding: 15px;
+  padding: 15px 15px 68px;
 }
 
 .message-item-head {
@@ -2864,22 +2872,30 @@ main {
 }
 
 .message-item-actions {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
   display: flex;
   gap: 8px;
   justify-content: flex-end;
 }
 
 .message-item-actions button {
-  min-height: 30px;
-  padding: 0 10px;
+  display: inline-grid;
+  place-items: center;
+  width: 58px;
+  height: 38px;
+  padding: 0;
   border: 0;
   border-radius: 999px;
   background: rgba(134, 184, 199, 0.14);
   color: var(--blue-deep);
   cursor: pointer;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .message-item-actions button:hover,
@@ -3138,6 +3154,12 @@ body.longing .leaflet-couple-pin-penguin .leaflet-couple-pin-shape {
 
 body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   animation: leanLeft 0.82s ease-in-out;
+}
+
+@keyframes distanceRouteFlow {
+  to {
+    stroke-dashoffset: -32;
+  }
 }
 
 @keyframes markerPulse {
