@@ -2123,7 +2123,7 @@ function openAuthModal(boardId = null, options = {}) {
     elements.authCopy.textContent = "旅行相册只给麦麦和兔兔查看。";
   } else if (context === "site") {
     elements.authTitle.textContent = "鹅兔专属入口";
-    elements.authCopy.textContent = "登录后可以查看旅行相册、专属留言板和小小愿望清单。";
+    elements.authCopy.textContent = "登录后可以查看鹅兔的专属内容。";
   } else {
     elements.authTitle.textContent = "鹅兔留言入口";
     elements.authCopy.textContent = "留言板只给麦麦和兔兔使用！";
@@ -2658,11 +2658,11 @@ function renderMessageReplies(message) {
               <span class="message-reply-meta">
                 <time datetime="${escapeHTML(reply.updatedAt || reply.createdAt)}">${getReplyStatus(reply)}</time>
                 ${canManageReplyItem && !isEditingReply
-                  ? `<span class="message-reply-actions">
+            ? `<span class="message-reply-actions">
                       <button type="button" data-edit-reply="${escapeHTML(reply.id)}">编辑</button>
                       <button class="message-reply-delete-button" type="button" data-delete-reply="${escapeHTML(reply.id)}">删除</button>
                     </span>`
-                  : ""}
+            : ""}
               </span>
             </div>
             ${isEditingReply ? renderMessageReplyEditForm(reply) : `<p>${escapeHTML(reply.content)}</p>`}
@@ -2825,7 +2825,7 @@ function renderMessageList() {
   if (messageState.syncStatus === "loading") {
     elements.messageList.innerHTML = `
       <div class="message-empty">
-        <strong>正在同步留言</strong>
+        <strong>正在同步留言...</strong>
         <span>稍等一下，小纸条正在赶来。</span>
       </div>
     `;
