@@ -56,11 +56,10 @@ body {
   color: var(--ink);
   background-color: var(--canvas);
   background:
-    var(--luxe-texture),
-    linear-gradient(135deg, var(--canvas-light) 0%, var(--canvas) 48%, var(--canvas-cool) 100%);
-  background-attachment: fixed, fixed;
-  background-repeat: repeat, no-repeat;
-  background-size: 512px 512px, 100% 100%;
+    linear-gradient(135deg, #fffaf4 0%, #f9f0e7 44%, #f2f8f3 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   font-family: var(--font-body);
   font-weight: 300;
   letter-spacing: 0;
@@ -121,13 +120,11 @@ main {
   content: "";
   opacity: 0.42;
   background-image:
-    linear-gradient(115deg, transparent 0 13%, rgba(255, 253, 248, 0.16) 13.15%, transparent 13.55%, transparent 100%),
-    linear-gradient(64deg, transparent 0 57%, rgba(127, 107, 102, 0.055) 57.15%, transparent 57.45%, transparent 100%),
-    linear-gradient(180deg, rgba(255, 253, 248, 0.24), rgba(255, 253, 248, 0));
-  background-position: 50% 0, 50% 0, 0 0;
+    linear-gradient(180deg, rgba(255, 253, 248, 0.38), rgba(255, 253, 248, 0.08) 46%, rgba(255, 253, 248, 0.26));
+  background-position: 0 0;
   background-repeat: no-repeat;
-  background-size: 132% 100%, 146% 100%, 100% 100%;
-  mix-blend-mode: multiply;
+  background-size: 100% 100%;
+  mix-blend-mode: screen;
 }
 
 main {
