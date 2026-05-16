@@ -398,6 +398,7 @@ const mapState = {
   map: null,
   route: null,
   markers: {},
+  resizeFrame: null,
 };
 
 const musicState = {
@@ -820,6 +821,15 @@ function syncMarkerContent(personId) {
   marker.setTooltipContent(getLocationTooltip(person));
 }
 
+function getMapFitPadding() {
+  const mapWidth = elements.mapCanvas?.clientWidth || window.innerWidth;
+
+  if (mapWidth <= 360) return [22, 44];
+  if (mapWidth <= 560) return [30, 52];
+
+  return [70, 106];
+}
+
 function updateMapRoute({ fit = false } = {}) {
   if (!mapState.map) return;
 
@@ -855,7 +865,7 @@ function updateMapRoute({ fit = false } = {}) {
 
   mapState.map.fitBounds(L.latLngBounds(points), {
     maxZoom: distance < 50 ? 12 : distance < 300 ? 8 : 5,
-    padding: [70, 106],
+    padding: getMapFitPadding(),
   });
 }
 
@@ -3853,7 +3863,16 @@ function boot() {
   bindTimelineScroll();
   initSupabaseAuth();
   window.addEventListener("resize", () => {
-    mapState.map?.invalidateSize();
+    if (mapState.resizeFrame) {
+      window.cancelAnimationFrame(mapState.resizeFrame);
+    }
+
+    mapState.resizeFrame = window.requestAnimationFrame(() => {
+      mapState.map?.invalidateSize();
+      updateMapRoute({ fit: true });
+      mapState.resizeFrame = null;
+    });
+
     updateTimelineFade();
   });
 }

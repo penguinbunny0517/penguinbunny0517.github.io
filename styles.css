@@ -574,6 +574,8 @@ main {
   gap: clamp(14px, 2.2vw, 32px);
   align-items: center;
   width: min(1240px, calc(100% - 36px));
+  max-width: 100%;
+  min-width: 0;
   min-height: 90svh;
   margin: 0 auto;
   padding: 108px 0 clamp(30px, 4.5vw, 54px);
@@ -630,6 +632,8 @@ main {
   display: grid;
   gap: 14px;
   align-self: center;
+  width: 100%;
+  max-width: 100%;
   min-width: 0;
   padding: clamp(14px, 2.1vw, 22px);
   border: 1px solid rgba(255, 255, 255, 0.74);
@@ -686,6 +690,9 @@ main {
 
 .map-canvas {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   aspect-ratio: 16 / 9;
   min-height: 340px;
   overflow: hidden;
@@ -700,6 +707,13 @@ main {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 13px;
+}
+
+.map-canvas .leaflet-container,
+.map-canvas .leaflet-pane,
+.map-canvas .leaflet-map-pane,
+.map-canvas .leaflet-control-container {
+  max-width: 100%;
 }
 
 .map-canvas .leaflet-tile-pane {
@@ -3564,8 +3578,12 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   }
 
   .hero-section {
-    width: min(100% - 24px, 520px);
+    width: min(calc(100% - 24px), 520px);
     padding-top: 92px;
+  }
+
+  .map-workbench {
+    padding: 12px;
   }
 
   .map-heading,
@@ -3590,6 +3608,15 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
 
   .map-canvas {
     min-height: 270px;
+  }
+
+  .map-canvas .leaflet-control-attribution {
+    right: 0;
+    bottom: 0;
+    max-width: calc(100% - 14px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .location-strip {
