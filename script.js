@@ -2149,7 +2149,7 @@ function openAuthModal(boardId = null, options = {}) {
   } else if (!authState.client) {
     setAuthStatus("认证服务还没准备好，检查网络后刷新页面。", "error");
   } else if (context === "trip") {
-    setAuthStatus("登录后就可以打开旅行相册。", "neutral");
+    setAuthStatus("登录后才可以打开旅行相册哦～", "neutral");
   } else if (context === "site") {
     setAuthStatus(
       authState.session
