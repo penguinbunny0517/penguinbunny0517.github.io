@@ -994,6 +994,7 @@ function updateMusicDisplay() {
 
   if (playToggle) {
     playToggle.textContent = musicState.isPlaying ? "⏸" : "▶";
+    playToggle.classList.toggle("is-playing", musicState.isPlaying);
     playToggle.setAttribute("aria-label", musicState.isPlaying ? "暂停音乐" : "播放音乐");
   }
 

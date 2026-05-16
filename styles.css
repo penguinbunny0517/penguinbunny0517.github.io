@@ -346,6 +346,7 @@ main {
   place-items: center;
   width: 32px;
   height: 32px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
   background: rgba(134, 184, 199, 0.16);
@@ -367,7 +368,14 @@ main {
   background: var(--coral);
   color: #fffdf8;
   font-size: 15px;
+  padding-top: 2px;
+  text-indent: 2px;
   box-shadow: 0 10px 22px rgba(201, 91, 82, 0.2);
+}
+
+.music-control-button-main.is-playing {
+  padding-top: 0;
+  text-indent: 0;
 }
 
 .music-control-button:hover,
