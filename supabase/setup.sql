@@ -10,7 +10,7 @@ stable
 as $$
   select case lower(coalesce(auth.jwt() ->> 'email', ''))
     when 'suzhiyuan0326@163.com' then 'maimai'
-    when 'penguinbunny0517@163.com' then 'tutu'
+    when '15320934752@163.com' then 'tutu'
     else null
   end;
 $$;

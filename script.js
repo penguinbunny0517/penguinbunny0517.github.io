@@ -83,7 +83,7 @@ const appData = {
       id: "tutu",
       name: "兔兔公主",
       emoji: "🐰",
-      email: "penguinbunny0517@163.com",
+      email: "15320934752@163.com",
     },
   ],
   messageBoards: [
@@ -95,7 +95,7 @@ const appData = {
       accent: "penguin",
       emoji: "🐧",
       line: "「他们写了日影一封信。」",
-      allowedEmails: ["suzhiyuan0326@163.com", "penguinbunny0517@163.com"],
+      allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
     },
     {
       id: "tutu",
@@ -105,7 +105,7 @@ const appData = {
       accent: "rabbit",
       emoji: "🐰",
       line: "「我的诗情没有两片叶子。」",
-      allowedEmails: ["suzhiyuan0326@163.com", "penguinbunny0517@163.com"],
+      allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
     },
   ],
   auth: {
