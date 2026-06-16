@@ -71,6 +71,34 @@ const appData = {
       artist: "JIDA / Rachel Lim",
       src: "assets/musics/AutumnBreeze-JIDA&RachelLim.mp3",
     },
+    {
+      id: "maimai-dimples",
+      title: "小酒窝",
+      artist: "麦麦",
+      src: "assets/musics/小酒窝-麦麦.mp3",
+      allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
+    },
+    {
+      id: "maimai-only-you",
+      title: "唯你懂我心",
+      artist: "麦麦",
+      src: "assets/musics/唯你懂我心-麦麦.mp3",
+      allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
+    },
+    {
+      id: "maimai-cute-mosquito",
+      title: "可爱的蚊子",
+      artist: "麦麦",
+      src: "assets/musics/可爱的蚊子-麦麦.m4a",
+      allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
+    },
+    {
+      id: "maimai-flower-sea",
+      title: "花海",
+      artist: "麦麦",
+      src: "assets/musics/花海-麦麦.m4a",
+      allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
+    },
   ],
   messageAuthors: [
     {
@@ -915,24 +943,36 @@ function initLeafletMap() {
   updateMapRoute({ fit: true });
 }
 
+function canAccessMusicTrack(track) {
+  const allowedEmails = (track?.allowedEmails || []).map(normalizeEmail);
+  if (!allowedEmails.length) return true;
+
+  return Boolean(authState.session && allowedEmails.includes(getCurrentAuthEmail()));
+}
+
+function getAvailableMusicTracks() {
+  return appData.musicTracks.filter(canAccessMusicTrack);
+}
+
 function getCurrentTrack() {
-  return appData.musicTracks.find((track) => track.id === musicState.currentId);
+  return getAvailableMusicTracks().find((track) => track.id === musicState.currentId);
 }
 
 function getCurrentTrackIndex() {
-  return appData.musicTracks.findIndex((track) => track.id === musicState.currentId);
+  return getAvailableMusicTracks().findIndex((track) => track.id === musicState.currentId);
 }
 
 function getWrappedTrack(step) {
-  if (!appData.musicTracks.length) return null;
+  const availableTracks = getAvailableMusicTracks();
+  if (!availableTracks.length) return null;
 
   const currentIndex = getCurrentTrackIndex();
-  if (currentIndex < 0) return appData.musicTracks[0];
+  if (currentIndex < 0) return availableTracks[0];
 
   const baseIndex = currentIndex;
-  const nextIndex = (baseIndex + step + appData.musicTracks.length) % appData.musicTracks.length;
+  const nextIndex = (baseIndex + step + availableTracks.length) % availableTracks.length;
 
-  return appData.musicTracks[nextIndex];
+  return availableTracks[nextIndex];
 }
 
 function formatMusicTime(seconds) {
@@ -979,7 +1019,7 @@ function resolveMusicTrackUrl(track) {
 }
 
 function preloadMusicTrackUrls() {
-  appData.musicTracks.forEach((track) => {
+  getAvailableMusicTracks().forEach((track) => {
     resolveMusicTrackUrl(track);
   });
 }
@@ -1119,6 +1159,8 @@ function setMusicMenuOpen(isOpen) {
 }
 
 function renderMusicMenu() {
+  const availableTracks = getAvailableMusicTracks();
+
   elements.musicMenu.innerHTML = `
     <div class="music-now">
       <span id="musicNowTitle">还没有选择歌曲</span>
@@ -1169,7 +1211,7 @@ function renderMusicMenu() {
       >
     </div>
     <div class="music-list">
-      ${appData.musicTracks
+      ${availableTracks
       .map(
         (track) => `
         <button class="music-option" type="button" data-music-id="${track.id}" aria-pressed="false">
@@ -1313,8 +1355,26 @@ function renderMusicMenu() {
   updateMusicProgress();
 }
 
+function refreshMusicAccess() {
+  if (!elements.musicMenu) return;
+
+  const selectedTrack = appData.musicTracks.find((track) => track.id === musicState.currentId);
+
+  if (selectedTrack && !canAccessMusicTrack(selectedTrack)) {
+    elements.bgmAudio.pause();
+    elements.bgmAudio.removeAttribute("src");
+    elements.bgmAudio.load();
+    delete elements.bgmAudio.dataset.musicId;
+    musicState.currentId = null;
+    musicState.isPlaying = false;
+  }
+
+  preloadMusicTrackUrls();
+  renderMusicMenu();
+}
+
 async function playMusicTrack(trackId, options = {}) {
-  const track = appData.musicTracks.find((item) => item.id === trackId);
+  const track = getAvailableMusicTracks().find((item) => item.id === trackId);
   const isSameTrack = musicState.currentId === trackId;
   const shouldCloseMenu = options.closeMenu ?? true;
 
@@ -1339,7 +1399,7 @@ async function playMusicTrack(trackId, options = {}) {
   if (elements.bgmAudio.dataset.musicId !== track.id) {
     const sourceUrl = await resolveMusicTrackUrl(track);
 
-    if (musicState.currentId !== track.id) return;
+    if (musicState.currentId !== track.id || !canAccessMusicTrack(track)) return;
 
     elements.bgmAudio.src = sourceUrl;
     elements.bgmAudio.dataset.musicId = track.id;
@@ -1369,7 +1429,7 @@ function toggleCurrentMusicTrack() {
     return;
   }
 
-  const currentTrack = getCurrentTrack() || appData.musicTracks[0];
+  const currentTrack = getCurrentTrack() || getAvailableMusicTracks()[0];
   if (currentTrack) {
     playMusicTrack(currentTrack.id, { closeMenu: false });
   }
@@ -2056,6 +2116,7 @@ function createSupabaseClient() {
 }
 
 function updateAuthDependentUI() {
+  refreshMusicAccess();
   renderMessageBoards();
   updateMessageAuthStatus();
   updateTripAuthStatus();

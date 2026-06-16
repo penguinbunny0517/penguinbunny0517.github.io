@@ -535,6 +535,25 @@ main {
 .music-list {
   display: grid;
   gap: 6px;
+  max-height: 386px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(134, 184, 199, 0.48) transparent;
+}
+
+.music-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.music-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.music-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(134, 184, 199, 0.42);
 }
 
 .music-option {
