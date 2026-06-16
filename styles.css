@@ -3601,6 +3601,14 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
 }
 
 @media (max-width: 560px) {
+  :root {
+    --section-block-padding: 46px;
+  }
+
+  section {
+    scroll-margin-top: 82px;
+  }
+
   .site-header {
     align-items: center;
     width: min(100% - 20px, 460px);
@@ -3630,11 +3638,31 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   .music-menu {
     right: -4px;
     width: min(236px, calc(100vw - 34px));
+    max-height: calc(100svh - 86px);
+    overflow-y: auto;
+  }
+
+  .music-list {
+    max-height: min(322px, 42svh);
   }
 
   .hero-section {
     width: min(calc(100% - 24px), 520px);
-    padding-top: 92px;
+    gap: 16px;
+    padding-top: 88px;
+    padding-bottom: 32px;
+  }
+
+  .hero-copy h1 {
+    max-width: 6.2em;
+    font-size: 35px;
+    line-height: 1;
+  }
+
+  .hero-note {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.65;
   }
 
   .page-shell::after {
@@ -3644,13 +3672,21 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   }
 
   .map-workbench {
-    padding: 12px;
+    gap: 10px;
+    padding: 11px;
   }
 
-  .map-heading,
+  .map-heading {
+    align-items: center;
+    flex-direction: row;
+    gap: 12px;
+  }
+
   .section-heading {
     align-items: start;
     flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
   .section-ornament {
@@ -3663,12 +3699,18 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   }
 
   .distance-badge {
-    width: 100%;
-    text-align: left;
+    width: auto;
+    min-width: 96px;
+    padding: 8px 10px;
+    text-align: right;
+  }
+
+  .distance-badge span:first-child {
+    font-size: 22px;
   }
 
   .map-canvas {
-    min-height: 270px;
+    min-height: 236px;
   }
 
   .map-canvas .leaflet-control-attribution {
@@ -3682,10 +3724,12 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
 
   .location-strip {
     grid-template-columns: 1fr;
+    gap: 9px;
   }
 
   .location-pill {
     grid-template-columns: 1fr auto;
+    padding: 10px 11px;
   }
 
   .location-pill strong {
@@ -3698,6 +3742,49 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
 
   .trip-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .trip-card {
+    grid-template-columns: 108px minmax(0, 1fr);
+    grid-template-rows: auto;
+    align-items: stretch;
+    gap: 12px;
+    min-height: 132px;
+    padding: 9px 12px 9px 9px;
+    text-align: left;
+  }
+
+  .trip-card::before {
+    top: -7px;
+    left: 30px;
+    width: 48px;
+    height: 16px;
+  }
+
+  .trip-photo {
+    aspect-ratio: 1;
+    align-self: stretch;
+  }
+
+  .trip-title-group {
+    align-content: center;
+    min-height: 0;
+  }
+
+  .trip-card h3,
+  .trip-english,
+  .trip-date {
+    text-align: left;
+  }
+
+  .trip-card h3 {
+    font-size: 19px;
+    line-height: 1.22;
+  }
+
+  .trip-loading-copy h3 {
+    font-size: 17px;
   }
 
   .section-inner {
@@ -3710,12 +3797,13 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   .milestones-section,
   .wishes-section,
   .messages-section {
-    padding-block: 54px;
+    padding-block: 46px;
   }
 
   .next-action {
     grid-template-columns: 1fr;
     justify-items: start;
+    gap: 12px;
   }
 
   .next-note {
@@ -3723,12 +3811,14 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
   }
 
   .milestone-note-board {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .wish-toolbar {
     align-items: start;
     flex-direction: column;
+    gap: 12px;
   }
 
   .wish-form {
@@ -3743,16 +3833,43 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
     grid-template-columns: 1fr;
   }
 
+  .wish-workbench {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .wish-stats span {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+
   .milestone-note,
   .milestone-note:nth-child(2n),
   .milestone-note:nth-child(3n) {
+    min-height: 168px;
     margin-top: 0;
+    padding: 19px 12px 15px;
     transform: rotate(var(--note-tilt));
+  }
+
+  .milestone-date strong {
+    font-size: 32px;
+  }
+
+  .milestone-note h3 {
+    font-size: 19px;
+  }
+
+  .milestone-status {
+    padding: 6px 8px;
+    font-size: 11px;
   }
 
   .message-board-card {
     grid-template-columns: 1fr;
+    gap: 12px;
     min-height: 0;
+    padding: 20px;
   }
 
   .message-board-stamp {
@@ -3797,6 +3914,87 @@ body.longing .leaflet-couple-pin-rabbit .leaflet-couple-pin-shape {
 
   .message-reply-form button {
     justify-self: end;
+  }
+
+  .trip-modal,
+  .message-modal,
+  .message-image-modal,
+  .auth-modal {
+    padding: 10px;
+  }
+
+  .modal-card,
+  .message-modal-card {
+    width: 100%;
+    max-height: calc(100svh - 20px);
+    border-radius: 8px;
+  }
+
+  .modal-gallery img {
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+    max-height: 46svh;
+  }
+
+  .modal-copy {
+    gap: 10px;
+    padding: 22px 18px 24px;
+  }
+
+  .modal-copy blockquote {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .auth-card {
+    padding: 24px 20px;
+  }
+
+  .message-list {
+    max-height: 48svh;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-title {
+    max-width: 124px;
+  }
+
+  .site-login-button {
+    padding-inline: 9px;
+  }
+
+  .hero-copy h1 {
+    font-size: 32px;
+  }
+
+  .map-heading {
+    gap: 8px;
+  }
+
+  .map-heading h2 {
+    font-size: 24px;
+  }
+
+  .distance-badge {
+    min-width: 86px;
+    padding: 7px 8px;
+  }
+
+  .distance-badge span:first-child {
+    font-size: 20px;
+  }
+
+  .trip-card {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .map-canvas {
+    min-height: 216px;
+  }
+
+  .milestone-note-board {
+    gap: 10px;
   }
 }
 
