@@ -7,9 +7,9 @@ const appData = {
       location: {
         label: "",
         city: "",
-        lat: 39.9725,
-        lng: 116.318,
-        timeZone: "Asia/Shanghai",
+        lat: 36.001111111,
+        lng: -78.938888889,
+        timeZone: "America/New_York",
       },
       note: "",
     },
@@ -20,8 +20,8 @@ const appData = {
       location: {
         label: "",
         city: "",
-        lat: 39.810167,
-        lng: 116.110999,
+        lat: 39.948333333,
+        lng: 116.3175,
         timeZone: "Asia/Shanghai",
       },
       note: "",
@@ -593,7 +593,10 @@ function renderDistance() {
 }
 
 function formatCoordinate(location) {
-  return `北纬 ${location.lat.toFixed(3)}°，东经 ${location.lng.toFixed(3)}°`;
+  const latDirection = location.lat >= 0 ? "北纬" : "南纬";
+  const lngDirection = location.lng >= 0 ? "东经" : "西经";
+
+  return `${latDirection} ${Math.abs(location.lat).toFixed(3)}°，${lngDirection} ${Math.abs(location.lng).toFixed(3)}°`;
 }
 
 function getLocationLabel(person) {
@@ -710,6 +713,9 @@ function formatReverseGeocodeCity(result, fallback) {
 
 async function reverseGeocodePerson(person) {
   const { location } = person;
+
+  if (location.lockLabel) return;
+
   const cache = getGeocodeCache();
   const cacheKey = getGeocodeCacheKey(location);
 
