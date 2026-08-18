@@ -439,7 +439,7 @@ const musicState = {
   volume: 0.58,
 };
 
-const GEOCODE_CACHE_KEY = "penguinBunnyReverseGeocodeV2";
+const GEOCODE_CACHE_KEY = "penguinBunnyReverseGeocodeV3";
 const MESSAGE_STORAGE_KEY = "penguinBunnyMessagesLocalV2";
 const WISH_STORAGE_KEY = "penguinBunnyWishesLocalV2";
 const LEGACY_WISH_STORAGE_KEYS = ["penguinBunnyWishesLocalV1"];
@@ -641,8 +641,34 @@ function uniqueLocationParts(parts) {
     });
 }
 
+function normalizeLocationAlias(part) {
+  const alias = String(part || "").trim();
+  const aliasMap = {
+    "United States": "美国",
+    "United States of America": "美国",
+    USA: "美国",
+    US: "美国",
+    美國: "美国",
+    "North Carolina": "北卡罗来纳州",
+    北卡羅萊那州: "北卡罗来纳州",
+    Durham: "达勒姆",
+    "Durham County": "达勒姆",
+  };
+
+  return aliasMap[alias] || alias;
+}
+
 function cleanLocationPart(part) {
-  return String(part || "").trim();
+  const aliases = String(part || "")
+    .split(/[;；]/)
+    .map(normalizeLocationAlias)
+    .filter(Boolean);
+
+  return (
+    aliases.find((alias) => /[\u4e00-\u9fff]/.test(alias)) ||
+    aliases[0] ||
+    ""
+  );
 }
 
 function stripLocationSuffix(part) {
@@ -656,7 +682,7 @@ function isSameLocationPart(a, b) {
 function getDisplayNameParts(result) {
   return String(result.display_name || "")
     .split(",")
-    .map((part) => part.trim())
+    .map(cleanLocationPart)
     .filter(Boolean);
 }
 
