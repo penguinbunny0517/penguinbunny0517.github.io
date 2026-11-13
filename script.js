@@ -27,7 +27,8 @@ const appData = {
       note: "",
     },
   },
-  nextMeetDate: null,
+  nextMeetDate: "2027-03-07",
+  nextMeetPlace: "洛杉矶",
   musicTracks: [
     {
       id: "mainli",
@@ -3953,10 +3954,8 @@ function renderNextMeet() {
     return;
   }
 
-  const target = new Date(appData.nextMeetDate);
-  const now = new Date();
-  const days = Math.max(0, Math.ceil((target - now) / 86400000));
-  elements.nextMeetText.textContent = days === 0 ? "就是今天" : `还有 ${days} 天`;
+  const dateText = appData.nextMeetDate.split("-").join(".");
+  elements.nextMeetText.textContent = `${dateText} ${appData.nextMeetPlace}！`;
 }
 
 function releaseFloatingHeart(origin) {
