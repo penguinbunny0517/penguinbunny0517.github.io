@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>麦麦和兔兔的专属自习室 · Penguin &amp; Bunny</title>
+  <link rel="icon" href="assets/favicon/favicon.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai:wght@400;700&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap">
+  <link rel="stylesheet" href="study-room.css?v=2">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="site-auth.js?v=1"></script>
+  <script defer src="study-room.js?v=2"></script>
+</head>
+<body class="study-room-page">
+  <header class="study-topbar">
+    <a class="study-home" href="index.html"><span aria-hidden="true">←</span> 返回主页</a>
+    <button class="study-signout" id="studySignOut" type="button" hidden>退出登录</button>
+  </header>
+  <main class="study-main">
+    <div class="study-heading">
+      <p lang="en">PENGUIN &amp; BUNNY</p>
+      <h1>麦麦和兔兔的专属自习室</h1>
+    </div>
+
+    <div class="study-scene" id="studyScene" aria-label="窗边的一间暖灯小书房">
+      <img class="study-room-art" src="assets/decor/study-room.webp" alt="" width="1440" height="960">
+      <div class="study-actors" id="studyActors" hidden aria-hidden="true">
+        <div class="study-actor study-maimai" id="studyMaimai" hidden>
+          <img src="assets/decor/study-penguin.webp" alt="" width="346" height="400">
+          <span class="study-nest"></span>
+        </div>
+        <div class="study-actor study-tutu" id="studyTutu" hidden>
+          <img src="assets/decor/study-bunny-upright.webp" alt="" width="314" height="540">
+          <span class="study-nest"></span>
+        </div>
+        <span class="study-effect" id="studyEffect" hidden></span>
+      </div>
+    </div>
+
+    <section class="study-access" id="studyAccess" aria-label="自习室登录">
+      <form class="study-form" id="studyLogin">
+        <label>邮箱<input name="email" type="email" autocomplete="email" required></label>
+        <label>密码<input name="password" type="password" autocomplete="current-password" required></label>
+        <button type="submit" disabled>登录自习室</button>
+      </form>
+    </section>
+
+    <section class="study-controls" id="studyControls" aria-label="座位和互动" hidden>
+      <div class="study-seat-row">
+        <div class="study-seats" aria-label="座位状态">
+          <span class="study-seat study-seat-maimai" id="studyMaimaiSeat">麦麦小鹅 · 空座</span>
+          <span class="study-seat study-seat-tutu" id="studyTutuSeat">兔兔公主 · 空座</span>
+        </div>
+        <button class="study-sit" id="studySit" type="button" disabled>入座</button>
+      </div>
+      <div class="study-actions" id="studyActions" aria-label="双人互动" hidden></div>
+    </section>
+    <p class="study-status" id="studyStatus" role="status">正在打开自习室…</p>
+    <noscript><p class="study-status">请启用 JavaScript 后进入自习室。</p></noscript>
+  </main>
+</body>
+</html>

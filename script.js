@@ -101,20 +101,7 @@ const appData = {
       allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
     },
   ],
-  messageAuthors: [
-    {
-      id: "maimai",
-      name: "麦麦小鹅",
-      emoji: "🐧",
-      email: "suzhiyuan0326@163.com",
-    },
-    {
-      id: "tutu",
-      name: "兔兔公主",
-      emoji: "🐰",
-      email: "15320934752@163.com",
-    },
-  ],
+  messageAuthors: siteAuth.authors,
   messageBoards: [
     {
       id: "maimai",
@@ -137,10 +124,6 @@ const appData = {
       allowedEmails: ["suzhiyuan0326@163.com", "15320934752@163.com"],
     },
   ],
-  auth: {
-    supabaseUrl: "https://jzpoaywushcdqrhssksm.supabase.co",
-    supabaseAnonKey: "sb_publishable_yYHiwLSXOGgQtolLUp0sIQ_9F6y3s5V",
-  },
   trips: [
     {
       id: "dalian",
@@ -2188,18 +2171,6 @@ function updateSiteLoginButton() {
   elements.siteLoginButton.classList.toggle("is-authenticated", authenticated);
 }
 
-function createSupabaseClient() {
-  if (!window.supabase?.createClient) return null;
-
-  return window.supabase.createClient(appData.auth.supabaseUrl, appData.auth.supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      persistSession: true,
-    },
-  });
-}
-
 function updateAuthDependentUI() {
   refreshMusicAccess();
   renderMessageBoards();
@@ -2232,7 +2203,7 @@ function completePendingAuthAction() {
 async function initSupabaseAuth() {
   if (!elements.authModal) return;
 
-  authState.client = createSupabaseClient();
+  authState.client = siteAuth.createClient();
   authState.isReady = true;
 
   if (!authState.client) {
