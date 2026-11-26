@@ -107,7 +107,7 @@
     if (action === "hug" || action === "drink") partner.actor.dataset.motion = action;
 
     if (action === "kiss" || action === "hug" || action === "drink") {
-      view.effect.textContent = action === "drink" ? (senderId === "maimai" ? "🧋" : "🧊☕") : "♥";
+      view.effect.textContent = action === "drink" ? (senderId === "maimai" ? "🧋" : "☕") : "♥";
       if (action === "drink") view.effect.dataset.recipient = partnerId;
       view.effect.hidden = false;
     }
